@@ -26,14 +26,14 @@
     <Head title="Login" />
     <div class="hero min-h-screen bg-base-200">
         <div class="hero-content flex-col lg:flex-row">
-            <div class="text-center lg:w-[50vw] lg:text-right mx-5">
+            <div class="mx-5 text-center lg:w-[50vw] lg:text-right">
                 <h1 class="text-5xl font-bold">Login S1AR!</h1>
                 <p class="py-6">
-                    Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.
-                    In deleniti eaque aut repudiandae et a id nisi.
+                    S1AR adalah Sistem 1 Atap HR untuk memudahkan karyawan AIIA mengurus administrasi terkait HR dengan
+                    lebih cepat, ringkas dan terdigitalisasi untuk transformasi era Revolusi Industri 4.0
                 </p>
             </div>
-            <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div class="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
                 <form @submit.prevent="submit" class="card-body">
                     <BreezeValidationErrors class="mb-2" />
 

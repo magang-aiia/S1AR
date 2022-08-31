@@ -27,12 +27,12 @@ module.exports = {
 
     daisyui: {
         styled: true,
-        themes: ["emerald", "dark", "cmyk"],
+        themes: ["emerald", "forest"],
         base: true,
         utils: true,
         logs: true,
         rtl: false,
         prefix: "",
-        darkTheme: "dark",
+        darkTheme: "forest",
     },
 }

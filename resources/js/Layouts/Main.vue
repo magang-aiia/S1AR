@@ -60,14 +60,14 @@
     <div class="drawer">
         <input id="sidedrawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col flex-wrap bg-base-300">
-            <div class="p-3 w-full h-screen">
+            <div class="h-screen w-full p-3">
                 <!-- navbar  -->
                 <Navbar :nav="nav">
                     <template #brand>S1AR</template>
                 </Navbar>
 
                 <!-- content  -->
-                <div class="p-4 bg-base-100 shadow-lg rounded-xl mb-3 h-[calc(100vh_-_11.2rem)] overflow-y-auto">
+                <div class="mb-3 h-[calc(100vh_-_11.2rem)] overflow-y-auto rounded-xl bg-base-100 p-4 shadow-lg">
                     <slot></slot>
                 </div>
 

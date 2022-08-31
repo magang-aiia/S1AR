@@ -5,8 +5,8 @@
 </script>
 
 <template>
-    <footer class="footer place-content-center p-4 bg-base-100 shadow-lg text-base-content rounded-xl">
-        <div class="items-center grid-flow-col">
+    <footer class="footer place-content-center rounded-xl bg-base-100 p-4 text-base-content shadow-lg">
+        <div class="grid-flow-col items-center">
             <svg
                 width="36"
                 height="36"

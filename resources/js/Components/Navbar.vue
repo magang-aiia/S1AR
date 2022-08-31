@@ -13,9 +13,9 @@
 </script>
 
 <template>
-    <div class="navbar bg-base-100 rounded-xl mb-3 shadow-lg" v-if="!sidebar">
+    <div class="navbar mb-3 rounded-xl bg-base-100 shadow-lg" v-if="!sidebar">
         <div class="navbar-start">
-            <label for="sidedrawer" class="btn btn-square btn-ghost lg:hidden">
+            <label for="sidedrawer" class="btn btn-ghost btn-square lg:hidden">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-5 w-5"
@@ -28,25 +28,25 @@
             </label>
             <Link
                 :href="route('root')"
-                class="btn btn-ghost normal-case text-xl hidden lg:inline-flex"
+                class="btn btn-ghost hidden text-xl font-black normal-case lg:inline-flex"
                 v-if="$slots.brand"
             >
                 <slot name="brand" />
             </Link>
         </div>
         <div class="navbar-center flex">
-            <Link :href="route('root')" class="btn btn-ghost normal-case text-xl lg:hidden" v-if="$slots.brand">
+            <Link
+                :href="route('root')"
+                class="btn btn-ghost text-xl font-black normal-case lg:hidden"
+                v-if="$slots.brand"
+            >
                 <slot name="brand" />
             </Link>
-            <ul class="menu menu-horizontal p-0 hidden lg:inline-flex" v-if="nav != null">
+            <ul class="menu menu-horizontal hidden p-0 lg:inline-flex" v-if="nav != null">
                 <template v-for="navitem in nav" :key="navitem.name">
                     <li v-if="navitem.child.length > 0" tabindex="0">
                         <a :class="{ 'bg-primary hover:bg-primary/75': navitem.active }">
-                            <box-icon
-                                :type="navitem.iconType"
-                                :name="navitem.icon"
-                                class="fill-slate-700 dark:fill-slate-400"
-                            ></box-icon>
+                            <box-icon :type="navitem.iconType" :name="navitem.icon" class="fill-current"></box-icon>
                             {{ navitem.name }}
                             <svg
                                 class="fill-current"
@@ -58,7 +58,7 @@
                                 <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
                             </svg>
                         </a>
-                        <ul class="p-2 bg-base-100 shadow">
+                        <ul class="bg-base-100 p-2 shadow">
                             <li v-for="navchild in navitem.child" :key="navchild.name">
                                 <Link
                                     :href="navchild.to != null ? route(navchild.to) : '#'"
@@ -73,11 +73,7 @@
                             :href="navitem.to != null ? route(navitem.to) : '#'"
                             :class="{ 'bg-primary hover:bg-primary/75': navitem.active }"
                         >
-                            <box-icon
-                                :type="navitem.iconType"
-                                :name="navitem.icon"
-                                class="fill-slate-700 dark:fill-slate-400"
-                            ></box-icon>
+                            <box-icon :type="navitem.iconType" :name="navitem.icon" class="fill-current"></box-icon>
                             {{ navitem.name }}
                         </Link>
                     </li>
@@ -93,7 +89,7 @@
                 <div class="indicator">
                     <box-icon type="regular" name="bell" class="fill-slate-700 dark:fill-slate-400"></box-icon>
                     <span
-                        class="badge badge-xs text-base-100 indicator-item"
+                        class="badge indicator-item badge-xs text-base-100"
                         :class="{
                             'badge-secondary': route().current('notification'),
                             'badge-primary': !route().current('notification'),
@@ -103,14 +99,14 @@
                 </div>
             </Link>
             <div class="dropdown dropdown-end">
-                <label tabindex="0" class="btn btn-ghost btn-circle mr-2 avatar">
+                <label tabindex="0" class="avatar btn btn-ghost btn-circle mr-2">
                     <div class="w-10 rounded-full">
                         <img src="/img/avatar.jpg" />
                     </div>
                 </label>
                 <ul
                     tabindex="0"
-                    class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                    class="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
                 >
                     <li class="py-3 px-4 text-xs text-base-content">
                         {{ $page.props.auth.user.name }}
@@ -118,7 +114,7 @@
                     <li>
                         <a class="justify-between">
                             Change Password
-                            <span class="badge bg-warning border-warning"
+                            <span class="badge border-warning bg-warning"
                                 ><box-icon name="error" class="fill-red-500"></box-icon
                             ></span>
                         </a>
@@ -128,7 +124,7 @@
             </div>
         </div>
     </div>
-    <ul class="menu p-4 overflow-y-auto w-80 bg-base-100" v-else>
+    <ul class="menu w-80 overflow-y-auto bg-base-100 p-4" v-else>
         <template v-for="navitem in nav" :key="navitem.name">
             <li v-if="navitem.child.length > 0">
                 <a
@@ -136,15 +132,11 @@
                     @click="navitem.active = !navitem.active"
                     :class="{ 'bg-primary hover:bg-primary/75': navitem.active }"
                 >
-                    <span class="w-full flex items-center">
-                        <box-icon
-                            :type="navitem.iconType"
-                            :name="navitem.icon"
-                            class="mr-3 fill-slate-700 dark:fill-slate-400"
-                        ></box-icon>
+                    <span class="flex w-full items-center">
+                        <box-icon :type="navitem.iconType" :name="navitem.icon" class="mr-3 fill-current"></box-icon>
                         {{ navitem.name }}
                         <span
-                            class="transition-transform duration-300 ease-in-out ml-auto"
+                            class="ml-auto transition-transform duration-300 ease-in-out"
                             :class="{ 'rotate-90': navitem.active, 'rotate-0': !navitem.active }"
                         >
                             <svg
@@ -164,7 +156,7 @@
                         </span>
                     </span>
                 </a>
-                <div class="bg-transparent cursor-default" v-show="navitem.active">
+                <div class="cursor-default bg-transparent" v-show="navitem.active">
                     <ul class="w-full">
                         <li v-for="navchild in navitem.child" :key="navchild.name">
                             <Link
@@ -182,11 +174,7 @@
                     :href="navitem.to != null ? route(navitem.to) : '#'"
                     :class="{ 'bg-primary hover:bg-primary/75': navitem.active }"
                 >
-                    <box-icon
-                        :type="navitem.iconType"
-                        :name="navitem.icon"
-                        class="fill-slate-700 dark:fill-slate-400"
-                    ></box-icon>
+                    <box-icon :type="navitem.iconType" :name="navitem.icon" class="fill-current"></box-icon>
                     {{ navitem.name }}
                 </Link>
             </li>
