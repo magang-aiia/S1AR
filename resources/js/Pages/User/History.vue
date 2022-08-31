@@ -234,6 +234,9 @@
             search() {
                 this.page = 1
             },
+            showType() {
+                this.page = 1
+            },
             slice() {
                 if (this.page > this.totalPage) this.page = this.totalPage
             },

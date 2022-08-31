@@ -87,11 +87,11 @@
                 :class="{ 'bg-primary': route().current('notification') }"
             >
                 <div class="indicator">
-                    <box-icon type="regular" name="bell" class="fill-slate-700 dark:fill-slate-400"></box-icon>
+                    <box-icon type="regular" name="bell" class="fill-current"></box-icon>
                     <span
                         class="badge indicator-item badge-xs text-base-100"
                         :class="{
-                            'badge-secondary': route().current('notification'),
+                            'badge-info': route().current('notification'),
                             'badge-primary': !route().current('notification'),
                         }"
                         >10</span
