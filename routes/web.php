@@ -50,12 +50,42 @@ Route::get('/absensi', function () {
 })->middleware(['auth', 'verified'])->name('absensi');
 
 Route::get('/notification', function () {
-    return Inertia::render('User/Notification');
+    return Inertia::render('Notification');
 })->middleware(['auth', 'verified'])->name('notification');
 
 Route::get('/approval', function () {
     return Inertia::render('User/Approval');
 })->middleware(['auth', 'verified'])->name('approval');
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Admin/Dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/datadiri', function () {
+        return Inertia::render('Admin/Datadiri');
+    })->name('admin.datadiri');
+
+    Route::get('/cuti', function () {
+        return Inertia::render('Admin/Cuti');
+    })->name('admin.cuti');
+
+    Route::get('/izin', function () {
+        return Inertia::render('Admin/Izin');
+    })->name('admin.izin');
+
+    Route::get('/cuzia', function () {
+        return Inertia::render('Admin/Cuzia');
+    })->name('admin.cuzia');
+
+    Route::get('/pengajuan', function () {
+        return Inertia::render('Admin/Pengajuan');
+    })->name('admin.pengajuan');
+
+    Route::get('/absensi', function () {
+        return Inertia::render('Admin/Absensi');
+    })->name('admin.absensi');
+});
 
 
 

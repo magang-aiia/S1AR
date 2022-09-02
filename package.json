@@ -40,9 +40,11 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
+        "apexcharts": "^3.35.5",
         "boxicons": "^2.1.2",
         "daisyui": "^2.24.0",
         "moment": "^2.29.4",
-        "vue-custom-scrollbar": "^1.4.4"
+        "vue-custom-scrollbar": "^1.4.4",
+        "vue3-apexcharts": "^1.4.1"
     }
 }
