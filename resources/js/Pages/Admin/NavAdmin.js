@@ -32,6 +32,14 @@ function getNav(parentActive = "", childActive = "") {
             iconType: "regular",
             child: [],
         },
+        {
+            name: "Karyawan",
+            active: parentActive === "karyawan",
+            to: "admin.karyawan",
+            icon: "user",
+            iconType: "regular",
+            child: [],
+        },
     ]
 }
 

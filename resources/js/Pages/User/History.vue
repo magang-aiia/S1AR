@@ -1,5 +1,6 @@
 <script>
     import MainLayout from "@/Layouts/Main.vue"
+    import ModalCuzia from "@/Components/ModalCuzia.vue"
     import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
     import getNav from "@/Pages/User/NavUser.js"
     import moment from "moment"
@@ -8,6 +9,7 @@
         components: {
             MainLayout,
             HeadInertia,
+            ModalCuzia,
         },
         data() {
             return {
@@ -415,7 +417,17 @@
                             {{ item.status3 }}
                         </td>
                         <td>
-                            <div class="btn btn-primary btn-sm">detail</div>
+                            <label
+                                :for="
+                                    item.type == 'Cuti'
+                                        ? 'detail-cuti'
+                                        : item.type == 'Izin'
+                                        ? 'detail-izin'
+                                        : 'detail-datadiri'
+                                "
+                                class="btn btn-primary btn-sm"
+                                >detail</label
+                            >
                         </td>
                     </tr>
                 </tbody>
@@ -445,4 +457,5 @@
             </div>
         </div>
     </MainLayout>
+    <ModalCuzia />
 </template>

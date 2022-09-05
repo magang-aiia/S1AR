@@ -1,5 +1,7 @@
 <script setup>
-    import { Link } from "@inertiajs/inertia-vue3"
+    import { Link, useForm } from "@inertiajs/inertia-vue3"
+    import { ref } from "vue"
+
     defineProps({
         nav: {
             type: Array,
@@ -10,6 +12,26 @@
             default: false,
         },
     })
+
+    const route = window.route
+
+    const modalpass = ref(false)
+
+    const form = useForm({
+        old_password: "",
+        new_password: "",
+        confirm_password: "",
+    })
+
+    const submit = () => {
+        console.log(form.old_password)
+        console.log(form.new_password)
+        console.log(form.confirm_password)
+        form.reset("old_password")
+        form.reset("new_password")
+        form.reset("confirm_password")
+        modalpass.value = false
+    }
 </script>
 
 <template>
@@ -112,12 +134,7 @@
                         {{ $page.props.auth.user.name }}
                     </li>
                     <li>
-                        <a class="justify-between">
-                            Change Password
-                            <span class="badge border-warning bg-warning"
-                                ><box-icon name="error" class="fill-red-500"></box-icon
-                            ></span>
-                        </a>
+                        <label for="changepass"> Ubah Password </label>
                     </li>
                     <li><Link :href="route('logout')" method="post" as="button">Logout</Link></li>
                 </ul>
@@ -180,4 +197,44 @@
             </li>
         </template>
     </ul>
+
+    <input type="checkbox" id="changepass" class="modal-toggle" v-model="modalpass" />
+    <label
+        for="changepass"
+        id="modal"
+        class="modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out"
+    >
+        <Transition name="bounce">
+            <label for="" class="modal-box relative w-11/12 max-w-2xl" v-if="modalpass">
+                <label for="changepass" class="btn btn-circle btn-sm absolute right-4 top-4">✕</label>
+                <div class="mb-2 text-2xl font-bold">Form Ubah Password</div>
+                <div class="alert alert-warning mb-2 shadow-lg">
+                    <div>
+                        <box-icon name="error" class="fill-yellow-800"></box-icon>
+                        <span>pastikan anda ingat password lama dan baru</span>
+                    </div>
+                </div>
+                <form @submit.prevent="submit">
+                    <div class="mb-2">
+                        <label for="old_password" class="mb-2 block">Password Lama</label>
+                        <input type="password" v-model="form.old_password" id="old_password" class="input-text" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="new_password" class="mb-2 block">Password Baru</label>
+                        <input type="password" v-model="form.new_password" id="new_password" class="input-text" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="confirm_password" class="mb-2 block">Konfirmasi Password</label>
+                        <input
+                            type="password"
+                            v-model="form.confirm_password"
+                            id="confirm_password"
+                            class="input-text"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2 w-full">Ubah Password</button>
+                </form>
+            </label>
+        </Transition>
+    </label>
 </template>

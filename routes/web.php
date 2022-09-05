@@ -85,6 +85,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/absensi', function () {
         return Inertia::render('Admin/Absensi');
     })->name('admin.absensi');
+
+    Route::get('karyawan', function () {
+        return Inertia::render('Admin/Karyawan');
+    })->name('admin.karyawan');
 });
 
 

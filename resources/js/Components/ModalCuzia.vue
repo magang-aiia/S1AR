@@ -1,0 +1,322 @@
+<script>
+    export default {
+        props: {
+            modalDetailCutiData: {
+                type: Object,
+                default: () => ({}),
+            },
+            modalDetailIzinData: {
+                type: Object,
+                default: () => ({}),
+            },
+            modalDetailDatadiriData: {
+                type: Object,
+                default: () => ({}),
+            },
+            isApprovable: {
+                type: Boolean,
+                default: false,
+            },
+        },
+        data() {
+            return {
+                modalDetailCuti: false,
+                modalDetailIzin: false,
+                modalDetailDatadiri: false,
+                modalConfirm: false,
+            }
+        },
+        methods: {
+            reset() {
+                setTimeout(() => {
+                    this.modalDetailCuti = false
+                    this.modalDetailIzin = false
+                    this.modalDetailDatadiri = false
+                }, 300)
+            },
+        },
+    }
+</script>
+
+<template>
+    <input type="checkbox" id="detail-cuti" v-model="modalDetailCuti" class="modal-toggle" />
+    <label
+        :for="isApprovable ? '' : 'detail-cuti'"
+        class="modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out"
+    >
+        <Transition name="bounce">
+            <label v-if="modalDetailCuti" for="" class="modal-box relative w-11/12 max-w-4xl">
+                <div class="mb-2 text-2xl font-semibold">
+                    Detail cuti (<span class="font-extrabold">cxu9923829892</span>)
+                </div>
+                <div class="grid grid-cols-4 gap-x-6 gap-y-4">
+                    <div class="col-span-4 lg:col-span-2">
+                        <label for="name" class="mb-2 block">Nama</label>
+                        <input type="text" name="name" id="name" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-4 lg:col-span-2">
+                        <label for="npk" class="mb-2 block">NPK</label>
+                        <input type="text" name="npk" id="npk" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-4 lg:col-span-2">
+                        <label for="departemen" class="mb-2 block">Bagian</label>
+                        <input type="text" name="departemen" id="departemen" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-4 lg:col-span-2 lg:col-start-1 lg:row-start-1">
+                        <label for="jenis_cuti" class="mb-2 block">Jenis Cuti</label>
+                        <input type="text" name="jenis_cuti" id="jenis_cuti" class="input-text" />
+                    </div>
+                    <div class="col-span-4 lg:col-span-2 lg:col-start-1 lg:row-start-2">
+                        <label for="tgl_awal" class="mb-2 block">Tanggal Mulai Cuti</label>
+                        <input type="date" name="tgl_awal" id="tgl_awal" class="input-text" />
+                    </div>
+                    <div class="col-span-4 lg:col-span-2 lg:col-start-1 lg:row-start-3">
+                        <label for="tgl_akhir" class="mb-2 block">Tanggal Akhir Cuti</label>
+                        <input type="date" name="tgl_akhir" id="tgl_akhir" class="input-text" />
+                    </div>
+                    <div class="col-span-4">
+                        <label for="nama" class="mb-2 block">Alasan</label>
+                        <textarea
+                            rows="3"
+                            class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
+                        ></textarea>
+                    </div>
+                    <div class="col-span-4" v-if="isApprovable">
+                        <label for="nama" class="mb-2 block">Alasan Penolakan</label>
+                        <textarea
+                            rows="3"
+                            class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
+                        ></textarea>
+                    </div>
+                    <div
+                        class="col-span-4 flex items-center"
+                        :class="isApprovable ? 'justify-between md:flex-wrap-reverse' : 'justify-center'"
+                    >
+                        <label
+                            for="konfirmasi"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-error w-[calc(50%_-_.75rem)]"
+                            >Tolak</label
+                        >
+                        <label
+                            for="detail-cuti"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]"
+                            >Setujui</label
+                        >
+                        <label
+                            for="detail-cuti"
+                            v-if="!isApprovable"
+                            class="md:max-w-48 btn btn-primary w-full md:w-[calc(50%_-_.75rem)]"
+                            >Kembali</label
+                        >
+                    </div>
+                </div>
+            </label>
+        </Transition>
+    </label>
+
+    <input type="checkbox" id="detail-izin" v-model="modalDetailIzin" class="modal-toggle" />
+    <label
+        :for="isApprovable ? '' : 'detail-izin'"
+        class="modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out"
+    >
+        <Transition name="bounce">
+            <label for="" v-if="modalDetailIzin" class="modal-box relative w-11/12 max-w-6xl">
+                <div class="mb-2 text-2xl font-semibold">
+                    Detail izin (<span class="font-extrabold">cxu9923829892</span>)
+                </div>
+                <div class="grid grid-cols-6 gap-x-6 gap-y-4">
+                    <div class="col-span-6 row-span-6 h-[30rem] lg:col-span-4 lg:h-auto">
+                        <div class="h-full w-full rounded-lg bg-base-content"></div>
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="name" class="mb-2 block">Nama</label>
+                        <input type="text" name="name" id="name" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="npk" class="mb-2 block">NPK</label>
+                        <input type="text" name="npk" id="npk" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="departemen" class="mb-2 block">Bagian</label>
+                        <input type="text" name="departemen" id="departemen" class="input-text" disabled />
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="jenis_izin" class="mb-2 block">Jenis Izin</label>
+                        <input type="text" name="jenis_izin" id="jenis_izin" class="input-text" />
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="tgl_awal" class="mb-2 block">Tanggal Mulai Izin</label>
+                        <input type="date" name="tgl_awal" id="tgl_awal" class="input-text" />
+                    </div>
+                    <div class="col-span-3 lg:col-span-2 lg:col-end-7">
+                        <label for="tgl_akhir" class="mb-2 block">Tanggal Akhir Izin</label>
+                        <input type="date" name="tgl_akhir" id="tgl_akhir" class="input-text" />
+                    </div>
+                    <div class="col-span-6">
+                        <label for="nama" class="mb-2 block">Alasan</label>
+                        <textarea
+                            rows="3"
+                            class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
+                        ></textarea>
+                    </div>
+                    <div
+                        class="col-span-6 flex items-center"
+                        :class="isApprovable ? 'justify-between md:flex-wrap-reverse' : 'justify-center'"
+                    >
+                        <label
+                            for="konfirmasi"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-error w-[calc(50%_-_.75rem)]"
+                            >Tolak</label
+                        >
+                        <label
+                            for="detail-izin"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]"
+                            >Setujui</label
+                        >
+                        <label
+                            for="detail-izin"
+                            v-if="!isApprovable"
+                            class="md:max-w-48 btn btn-primary w-full md:w-[calc(50%_-_.75rem)]"
+                            >Kembali</label
+                        >
+                    </div>
+                </div>
+            </label>
+        </Transition>
+    </label>
+
+    <input type="checkbox" id="detail-datadiri" class="modal-toggle" v-model="modalDetailDatadiri" />
+    <label
+        :for="isApprovable ? '' : 'detail-datadiri'"
+        class="modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out"
+    >
+        <Transition name="bounce">
+            <label for="" v-if="modalDetailDatadiri" class="modal-box relative w-11/12 max-w-6xl">
+                <div class="mb-2 text-2xl font-semibold">
+                    Detail datadiri (<span class="font-extrabold">cxu9923829892</span>)
+                </div>
+                <div class="mb-6 flex flex-wrap items-center -md:flex-col -md:justify-center">
+                    <div
+                        class="mr-3 w-36 overflow-hidden rounded-full border-4 border-gray-300 dark:border-gray-800 -md:mb-3 -md:w-48"
+                    >
+                        <img src="/img/avatar.jpg" />
+                    </div>
+                    <div class="max-w-[calc(100%_-_11rem)] -md:max-w-sm -md:text-center">
+                        <div class="max-w-full truncate text-2xl font-bold md:text-4xl">Budi Suherman</div>
+                        <div class="text-md max-w-full truncate opacity-60 md:text-lg">budi.suherman@aiia.co.id</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-6 gap-x-6 gap-y-4">
+                    <div class="col-span-6 lg:col-span-2">
+                        <label for="name" class="mb-2 block">Nama Lengkap</label>
+                        <input type="text" name="name" id="name" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="email" class="mb-2 block">Email</label>
+                        <input type="email" name="email" id="email" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="no_hp" class="mb-2 block">No. Hp</label>
+                        <input type="text" name="no_hp" id="no_hp" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="tmp_lahir" class="mb-2 block">Tempat Lahir</label>
+                        <input type="text" name="tmp_lahir" id="tmp_lahir" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="tgl_lahir" class="mb-2 block">Tanggal Lahir</label>
+                        <input type="text" name="tgl_lahir" id="tgl_lahir" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="sta_nikah" class="mb-2 block">Status Nikah</label>
+                        <input type="text" name="sta_nikah" id="sta_nikah" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="no_npwp" class="mb-2 block">No. NPWP</label>
+                        <input type="text" name="no_npwp" id="no_npwp" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="no_ktp" class="mb-2 block">No. KTP</label>
+                        <input type="text" name="no_ktp" id="no_ktp" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="alamat_dom" class="mb-2 block">Alamat Domisili</label>
+                        <input type="text" name="alamat_dom" id="alamat_dom" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="alamat_ktp" class="mb-2 block">Alamat KTP</label>
+                        <input type="text" name="alamat_ktp" id="alamat_ktp" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="nama_istri" class="mb-2 block">Nama Istri</label>
+                        <input type="text" name="nama_istri" id="nama_istri" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="jml_anak" class="mb-2 block">Jumlah Anak</label>
+                        <input type="text" name="jml_anak" id="jml_anak" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="nama_anak_1" class="mb-2 block">Nama Anak Ke 1</label>
+                        <input type="text" name="nama_anak_1" id="nama_anak_1" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="nama_anak_2" class="mb-2 block">Nama Anak Ke 2</label>
+                        <input type="text" name="nama_anak_2" id="nama_anak_2" class="input-text" />
+                    </div>
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <label for="nama_anak_3" class="mb-3 block">Nama Anak Ke 3</label>
+                        <input type="text" name="nama_anak_3" id="nama_anak_3" class="input-text" />
+                    </div>
+                    <div class="col-span-6" v-if="isApprovable">
+                        <label for="nama" class="mb-2 block">Alasan Penolakan</label>
+                        <textarea
+                            rows="3"
+                            class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
+                        ></textarea>
+                    </div>
+                    <div
+                        class="col-span-6 flex items-center"
+                        :class="isApprovable ? 'justify-between md:flex-wrap-reverse' : 'justify-center'"
+                    >
+                        <label
+                            for="konfirmasi"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-error w-[calc(50%_-_.75rem)]"
+                            >Tolak</label
+                        >
+                        <label
+                            for="detail-datadiri"
+                            v-if="isApprovable"
+                            class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]"
+                            >Setujui</label
+                        >
+                        <label
+                            for="detail-datadiri"
+                            v-if="!isApprovable"
+                            class="md:max-w-48 btn btn-primary w-full md:w-[calc(50%_-_.75rem)]"
+                            >Kembali</label
+                        >
+                    </div>
+                </div>
+            </label>
+        </Transition>
+    </label>
+
+    <input type="checkbox" id="konfirmasi" class="modal-toggle" v-model="modalConfirm" />
+    <div class="modal modal-bottom cursor-pointer transition-all ease-in-out sm:modal-middle">
+        <Transition name="bounce">
+            <div class="modal-box" v-if="modalConfirm">
+                <div class="text-center text-2xl font-bold text-error">Konfirmasi Penolakan!</div>
+                <div class="my-4 text-lg">apakah anda akan benar-benar menolak permohonan ini?</div>
+                <div class="grid grid-cols-2 place-content-center gap-x-4">
+                    <label for="konfirmasi" class="btn btn-md">Kembali</label>
+                    <label for="konfirmasi" @click="reset()" class="btn btn-error btn-md">Tolak</label>
+                </div>
+            </div>
+        </Transition>
+    </div>
+</template>
