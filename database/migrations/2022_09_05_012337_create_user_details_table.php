@@ -13,17 +13,14 @@ class CreateUserDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user__details', function (Blueprint $table) {
+        Schema::create('user_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('name');
-            $table->string('npk')->unique();
-            $table->string('email')->unique();
             $table->string('no_hp')->unique();
             $table->string('tmp_lahir');
             $table->date('tgl_lahir');
             $table->date('tgl_bergabung');
-            $table->string('departemen');
+            $table->foreignId('departemen_id');
             $table->string('jabatan');
             $table->string('gol');
             $table->string('sta_kerja');
@@ -52,6 +49,6 @@ class CreateUserDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user__details');
+        Schema::dropIfExists('user_details');
     }
 }
