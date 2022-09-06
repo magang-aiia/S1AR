@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Mading::class);
     }
+
+    public function user_details()
+    {
+        return $this->hasOne(User_Detail::class);
+    }
 }

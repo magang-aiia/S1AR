@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePengajuanIzinsTable extends Migration
+class CreateMSubSectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,14 @@ class CreatePengajuanIzinsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pengajuan__izins', function (Blueprint $table) {
+        Schema::create('m_sub_sections', function (Blueprint $table) {
             $table->id();
+            $table->string('kode');
+            $table->string('nama');
+            $table->string('alias');
+            $table->string('kode_section');
+            $table->string('npk');
+
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreatePengajuanIzinsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pengajuan__izins');
+        Schema::dropIfExists('m_sub_sections');
     }
 }

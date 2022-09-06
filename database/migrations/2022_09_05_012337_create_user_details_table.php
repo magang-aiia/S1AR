@@ -13,7 +13,7 @@ class CreateUserDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user__details', function (Blueprint $table) {
+        Schema::create('user_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->string('name');
