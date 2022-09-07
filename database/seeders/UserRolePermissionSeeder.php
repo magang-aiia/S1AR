@@ -26,35 +26,48 @@ class UserRolePermissionSeeder extends Seeder
             'remember_token' => Str::random(10)
 
     ];
-    // DB::BeginTransaction();
-    // Try{
-        $staff = User::create(array_merge([
-            'name' => 'staff',
+    DB::BeginTransaction();
+    Try{
+        $users = User::create(array_merge([
+            'name' => 'Produksi',
+            'role' => 'user',
             'npk' => '000002',
-            'email' => 'staff@aiia.co.id'
+            'email' => 'user@aiia.co.id'
         ], $default_user_value));
 
-        $admin = User::create(array_merge([
-            'name' => 'itd',
+        $hrd = User::create(array_merge([
+            'name' => 'hrd',
+            'role' => 'hr',
             'npk' => '000001',
-            'email' => 'itd@aiia.co.id'
+            'email' => 'hrd@aiia.co.id'
         ], $default_user_value));
 
-        $role_staff = Role::create(['name' => 'staff']);
-        $role_itd = Role::create(['name' => 'itd']);
+        $atasan = User::create(array_merge([
+            'name' => 'Leader',
+            'role' => 'atasan1',
+            'npk' => '000003',
+            'email' => 'atasan1@aiia.co.id'
+        ], $default_user_value));
+
+        $role_user = Role::create(['name' => 'user']);
+        $role_atasan1 = Role::create(['name' => 'atasan1']);
+        $role_hrd = Role::create(['name' => 'hr']);
+
+
 
         $permission = Permission::create(['name' => 'read role']);
         $permission = Permission::create(['name' => 'create role']);
         $permission = Permission::create(['name' => 'update role']);
         $permission = Permission::create(['name' => 'delete role']);
 
-        $staff->assignRole('staff');
-        $staff->assignRole('itd');
-        // DB::commit();
+        $users->assignRole('user');
+        $hrd->assignRole('hr');
+        $atasan->assignRole('atasan1');
+        DB::commit();
 
-    // } catch(\Throwable $th){
-    //         DB::rollback();
-    // }
+    } catch(\Throwable $th){
+            DB::rollback();
+    }
         
        
 
