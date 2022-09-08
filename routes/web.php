@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\MadingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -17,12 +18,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 })->name('root');
 
 Route::get('/dashboard', function () {
@@ -86,9 +82,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         return Inertia::render('Admin/Absensi');
     })->name('admin.absensi');
 
-    Route::get('karyawan', function () {
-        return Inertia::render('Admin/Karyawan');
-    })->name('admin.karyawan');
+    Route::get('karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
+    Route::post('karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
+    Route::post('karyawan/{id}/update_status', [KaryawanController::class, 'update_status'])->name('admin.karyawan.update_status');
+    Route::post('karyawan/aktif_status', [KaryawanController::class, 'aktif_status'])->name('admin.karyawan.aktif_status');
+    Route::post('karyawan/nonaktif_status', [KaryawanController::class, 'nonaktif_status'])->name('admin.karyawan.nonaktif_status');
+    Route::post('karyawan/{id}/update', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
 });
 
 

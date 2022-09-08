@@ -15,13 +15,14 @@ class CreateUserDetailsTable extends Migration
     {
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('no_hp')->unique();
             $table->string('tmp_lahir');
             $table->date('tgl_lahir');
             $table->date('tgl_bergabung');
-            $table->foreignId('departemen_id');
+            $table->foreignId('departemen_id')->constrained('departemens')->onDelete('cascade');
             $table->string('jabatan');
+            $table->foreignId('kontrak_id')->constrained('kontraks')->onDelete('cascade');
             $table->string('gol');
             $table->string('sta_kerja');
             $table->string('sta_nikah');
@@ -38,6 +39,7 @@ class CreateUserDetailsTable extends Migration
             $table->string('nama_anak1');
             $table->string('nama_anak2');
             $table->string('nama_anak3');
+            $table->set('status', ['aktif', 'nonaktif']);
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if (Auth::user()->name == 'admin') {
+        if (Auth::user()->npk == '000000') {
             return redirect()->route('admin.dashboard');
         }
 

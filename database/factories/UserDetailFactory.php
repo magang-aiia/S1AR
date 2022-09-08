@@ -3,11 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Departemen;
+use App\Models\Kontrak;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserDetailFactory extends Factory
 {
+    
+    public $number = 2;
     /**
      * Define the model's default state.
      *
@@ -15,17 +18,17 @@ class UserDetailFactory extends Factory
      */
     public function definition()
     {
-        $user = User::pluck('id')->toArray();
-        $user = array_slice($user, 1);
+        $kontrak = Kontrak::pluck('id')->toArray();
         $departemen = Departemen::pluck('id')->toArray();
         return [
-            'user_id' => $this->faker->randomElement($user),
+            'user_id' => $this->number++,
             'no_hp' => $this->faker->phoneNumber(),
             'tmp_lahir'=> $this->faker->city(),
             'tgl_lahir' => $this->faker->date(),
-            'tgl_bergabung' => $this->faker->date(),
+            'tgl_bergabung' => $this->faker->dateTimeBetween('-8 years', 'now'),
             'departemen_id' => $this->faker->randomElement($departemen),
             'jabatan' => 'jabatan',
+            'kontrak_id' => $this->faker->randomElement($kontrak),
             'gol' => $this->faker->randomElement([1,2]),
             'sta_kerja' => 'status',
             'sta_nikah' => 'sudah',
@@ -42,6 +45,7 @@ class UserDetailFactory extends Factory
             'nama_anak1' => $this->faker->name(),
             'nama_anak2' => $this->faker->name(),
             'nama_anak3' => $this->faker->name(),
+            'status' => 'aktif',
         ];
     }
 }
