@@ -31,7 +31,7 @@ class CreateUserDetailsTable extends Migration
             $table->string('no_bpjs_kes');
             $table->string('no_dpa');
             $table->string('no_npwp');
-            $table->integer('no_ktp');
+            $table->string('no_ktp');
             $table->text('alamat_dom');
             $table->text('alamat_ktp');
             $table->string('nama_istri');

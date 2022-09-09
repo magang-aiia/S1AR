@@ -88,6 +88,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::post('karyawan/aktif_status', [KaryawanController::class, 'aktif_status'])->name('admin.karyawan.aktif_status');
     Route::post('karyawan/nonaktif_status', [KaryawanController::class, 'nonaktif_status'])->name('admin.karyawan.nonaktif_status');
     Route::post('karyawan/{id}/update', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
+    Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('admin.karyawan.export');
 });
 
 

@@ -1,6 +1,6 @@
 <script>
     import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3"
+    import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
     import getNav from "@/Pages/Admin/NavAdmin.js"
     import moment from "moment"
     import ModalCuzia from "@/Components/ModalCuzia.vue"
@@ -12,7 +12,6 @@
             MainLayout,
             HeadInertia,
             ModalCuzia,
-            LinkInertia,
         },
         props: {
             karyawan: {
@@ -139,6 +138,9 @@
                     }
                 )
             },
+            export_excel() {
+                window.open(route("admin.karyawan.export"))
+            },
         },
         computed: {
             columnKeys() {
@@ -227,7 +229,7 @@
             },
         },
         watch: {
-            slice() {
+            totalPage() {
                 if (this.page > this.totalPage) this.page = this.totalPage
             },
             isMounted() {
@@ -253,7 +255,7 @@
                 <label for="modal-filter" class="btn btn-info mr-2">FIlter</label>
                 <label for="add-detail-datadiri" class="btn btn-primary mr-2" @click="isNew = true">Tambah</label>
                 <label for="modal-upload" class="btn btn-primary mr-2">Upload</label>
-                <LinkInertia href="" class="btn btn-primary">Export</LinkInertia>
+                <button @click="export_excel()" class="btn btn-primary">Export</button>
             </div>
             <Transition name="bounce">
                 <div
