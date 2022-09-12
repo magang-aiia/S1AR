@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,12 +37,18 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        if (Auth::user()->role == 'hr') {
+        
+        if (Auth::user()->role === 'hr') {
             return redirect()->route('admin.dashboard');
         }
+        elseif(Auth::user()->role == "user"){
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }else{
+            return 'diluar  role';
+        }
+        
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        
     }
 
     /**

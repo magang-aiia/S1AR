@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MadingController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,6 +16,9 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+route::get('/admin/dashboard', [RoleController::class, 'index']);
+route::get('/admin/datadiri', [RoleController::class, 'admin_datadiri']);
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -58,6 +62,7 @@ Route::get('/approval', function () {
 })->middleware(['auth', 'verified'])->name('approval');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+
     Route::get('/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
@@ -86,11 +91,19 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         return Inertia::render('Admin/Absensi');
     })->name('admin.absensi');
 
-    Route::get('karyawan', function () {
+    Route::get('/karyawan', function () {
         return Inertia::render('Admin/Karyawan');
     })->name('admin.karyawan');
 });
-
-
-
 require __DIR__ . '/auth.php';
+
+
+
+
+
+// Route::resource('roles', RoleController::class);
+// Route::controller(RoleController::class)->group(function()
+// {
+//     Route::get('/roles', 'index')->middleware('can:read');
+
+// });
