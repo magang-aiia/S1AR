@@ -258,10 +258,10 @@
 
 <template>
     <HeadInertia title="Notification" />
-
+    <MainLayout>
         <div class="py-4 text-center text-3xl font-black uppercase text-base-content">Notifikasi</div>
                 <input type="number" v-model="slice" class="w-full flex-1 rounded-lg bg-base-100" />
-            </div>
+            <div>
             <div class="col-span-6 flex flex-wrap items-center sm:col-span-2">
                 <label class="mr-3 block">Urutkan berdasar : </label>
                 <select class="w-full flex-1 rounded-lg bg-base-100" v-model="sortDesc">

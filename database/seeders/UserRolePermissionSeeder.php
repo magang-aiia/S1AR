@@ -28,18 +28,10 @@ class UserRolePermissionSeeder extends Seeder
     ];
     DB::BeginTransaction();
     Try{
-        $admin = User::create([
-            'name' => 'admin',
-            'email' => 'admin.hr@aiia.co.id',
-            'role' => 'hr',
-            'npk' => '000000',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ]);
         $users = User::create(array_merge([
             'name' => 'Produksi',
             'role' => 'user',
+            'avatar' => 'avatar.jpg',
             'npk' => '000002',
             'email' => 'user@aiia.co.id'
         ], $default_user_value));
@@ -47,6 +39,7 @@ class UserRolePermissionSeeder extends Seeder
         $hrd = User::create(array_merge([
             'name' => 'hrd',
             'role' => 'hr',
+            'avatar' => 'avatar.jpg',
             'npk' => '000001',
             'email' => 'hrd@aiia.co.id'
         ], $default_user_value));
@@ -54,6 +47,7 @@ class UserRolePermissionSeeder extends Seeder
         $atasan = User::create(array_merge([
             'name' => 'Leader',
             'role' => 'atasan1',
+            'avatar' => 'avatar.jpg',
             'npk' => '000003',
             'email' => 'atasan1@aiia.co.id'
         ], $default_user_value));
@@ -76,7 +70,6 @@ class UserRolePermissionSeeder extends Seeder
         $users->assignRole('user');
         $hrd->assignRole('hr');
         $atasan->assignRole('atasan1');
-        $admin->assignRole('hr');
         DB::commit();
 
     } catch(\Throwable $th){
