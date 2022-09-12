@@ -123,7 +123,7 @@
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="avatar btn btn-ghost btn-circle mr-2">
                     <div class="w-10 rounded-full">
-                        <img src="/img/avatar.jpg" />
+                        <img :src="'/assets/image/' + $page.props.auth.user.avatar" />
                     </div>
                 </label>
                 <ul

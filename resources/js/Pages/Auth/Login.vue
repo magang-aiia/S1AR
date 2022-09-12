@@ -1,6 +1,7 @@
 <script setup>
     import BreezeValidationErrors from "@/Components/ValidationErrors.vue"
     import { Head, useForm } from "@inertiajs/inertia-vue3"
+    import BreezeCheckbox from "@/Components/Checkbox.vue"
 
     defineProps({
         canResetPassword: Boolean,
@@ -10,7 +11,7 @@
     const route = window.route
 
     const form = useForm({
-        email: "",
+        npk: "",
         password: "",
         remember: false,
     })
@@ -39,16 +40,15 @@
 
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">Email</span>
+                            <span class="label-text">NPK</span>
                         </label>
                         <input
                             type="text"
-                            placeholder="email"
-                            v-model="form.email"
+                            placeholder="npk"
+                            v-model="form.npk"
                             class="input input-bordered"
                             required
                             autofocus
-                            autocomplete="username"
                         />
                     </div>
                     <div class="form-control">
@@ -61,8 +61,13 @@
                             v-model="form.password"
                             class="input input-bordered"
                             required
-                            autocomplete="current-password"
                         />
+                    </div>
+                    <div class="mt-4 block">
+                        <label class="flex items-center">
+                            <BreezeCheckbox name="remember" v-model:checked="form.remember" />
+                            <span class="ml-2 text-sm text-gray-600">Simpan info login</span>
+                        </label>
                     </div>
                     <div class="form-control mt-6">
                         <button class="btn btn-primary">Login</button>

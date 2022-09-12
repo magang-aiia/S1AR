@@ -20,6 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'npk',
         'email',
         'role',
         'password',
@@ -49,8 +50,8 @@ class User extends Authenticatable
         return $this->hasMany(Mading::class);
     }
 
-    public function user_details()
+    public function userDetail()
     {
-        return $this->hasOne(User_Detail::class);
+        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak');
     }
 }

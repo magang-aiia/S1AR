@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\MadingController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Foundation\Application;
@@ -21,12 +22,7 @@ route::get('/admin/datadiri', [RoleController::class, 'admin_datadiri']);
 
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 })->name('root');
 
 Route::get('/dashboard', function () {
@@ -94,6 +90,14 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/karyawan', function () {
         return Inertia::render('Admin/Karyawan');
     })->name('admin.karyawan');
+    Route::get('karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
+    Route::post('karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
+    Route::post('karyawan/{id}/update_status', [KaryawanController::class, 'update_status'])->name('admin.karyawan.update_status');
+    Route::post('karyawan/aktif_status', [KaryawanController::class, 'aktif_status'])->name('admin.karyawan.aktif_status');
+    Route::post('karyawan/nonaktif_status', [KaryawanController::class, 'nonaktif_status'])->name('admin.karyawan.nonaktif_status');
+    Route::post('karyawan/{id}/update', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
+    Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('admin.karyawan.export');
+    Route::post('karyawan/import', [KaryawanController::class, 'import'])->name('admin.karyawan.import');
 });
 require __DIR__ . '/auth.php';
 

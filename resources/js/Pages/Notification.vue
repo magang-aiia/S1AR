@@ -259,11 +259,7 @@
 <template>
     <HeadInertia title="Notification" />
 
-    <MainLayout :nav="$page.props.auth.user.name === 'admin' ? navAdmin : navuser">
         <div class="py-4 text-center text-3xl font-black uppercase text-base-content">Notifikasi</div>
-        <div class="mb-4 grid grid-cols-6 gap-x-6 gap-y-4">
-            <div class="col-span-6 flex flex-wrap items-center sm:col-span-2 lg:col-auto">
-                <label class="mr-3 block">Tampilan per : </label>
                 <input type="number" v-model="slice" class="w-full flex-1 rounded-lg bg-base-100" />
             </div>
             <div class="col-span-6 flex flex-wrap items-center sm:col-span-2">

@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
        
 
         // random user dev
-        User::factory(4)->create();
-        UserDetail::factory(4)->create();
+        User::factory(560)->create();
+        UserDetail::factory(560)->create();
     }
 }
