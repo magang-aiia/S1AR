@@ -9,10 +9,12 @@ use App\Models\Departemen;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Exports\KaryawanExport;
+use App\Imports\KaryawanImport;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class KaryawanController extends Controller
 {
@@ -198,5 +200,18 @@ class KaryawanController extends Controller
     public function export() 
     {
         return Excel::download(new KaryawanExport, 'data_karyawan.xlsx');
+    }
+
+    public function import(Request $request) 
+    {
+        $request->validate([
+            'excel' => 'required|mimes:xls,xlsx',
+            'replace' => 'required|boolean'
+        ]);
+
+        Storage::putFileAs('public/image', $request->file('excel'), date('d-m-Y').'data_karyawan.xlsx');
+        Excel::import(new KaryawanImport($request->replace), $request->file('excel'));
+
+        return Redirect::route('admin.karyawan')->with('success', 'Data berhasil diimport');
     }
 }

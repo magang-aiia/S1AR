@@ -29,6 +29,14 @@
                 karyawanCheklist: [],
                 isAllChecked: false,
                 selectedKaryawan: null,
+                file: {
+                    excel: null,
+                    foto: null,
+                    replace: false,
+                },
+                isLoading: false,
+                loadingBy: null,
+                errors: {},
                 sortBy: "npk",
                 isNew: false,
                 sortDesc: false,
@@ -111,6 +119,14 @@
                     {
                         preserveState: true,
                         preserveScroll: true,
+                        onStart: () => {
+                            this.isLoading = true
+                            this.loadingBy = id
+                        },
+                        onFinish: () => {
+                            this.isLoading = false
+                            this.loadingBy = null
+                        },
                     }
                 )
             },
@@ -123,6 +139,14 @@
                     {
                         preserveState: true,
                         preserveScroll: true,
+                        onStart: () => {
+                            this.isLoading = true
+                            this.loadingBy = "aktif"
+                        },
+                        onFinish: () => {
+                            this.isLoading = false
+                            this.loadingBy = null
+                        },
                     }
                 )
             },
@@ -135,11 +159,46 @@
                     {
                         preserveState: true,
                         preserveScroll: true,
+                        onStart: () => {
+                            this.isLoading = true
+                            this.loadingBy = "nonaktif"
+                        },
+                        onFinish: () => {
+                            this.isLoading = false
+                            this.loadingBy = null
+                        },
                     }
                 )
             },
             export_excel() {
                 window.open(route("admin.karyawan.export"))
+            },
+            import_excel() {
+                this.$inertia.post(route("admin.karyawan.import"), this.file, {
+                    preserveState: true,
+                    preserveScroll: true,
+                    forceFormData: true,
+                    onStart: () => {
+                        this.isLoading = true
+                        this.loadingBy = "import"
+                    },
+                    onError: (error) => {
+                        this.errors = error
+                        this.loadingBy = null
+                        this.modalUpload = false
+                    },
+                    onSuccess: () => {
+                        this.file.excel = null
+                        this.file.replace = false
+                        this.isLoading = false
+                        this.loadingBy = null
+                        this.modalUpload = false
+                    },
+                    onFinish: () => {
+                        this.isLoading = false
+                        this.loadingBy = null
+                    },
+                })
             },
         },
         computed: {
@@ -249,7 +308,9 @@
     <HeadInertia title="Data Karyawan" />
 
     <MainLayout :nav="nav">
-        <div class="py-4 text-center text-3xl font-black uppercase text-base-content">Data Karyawan</div>
+        <div class="py-4 text-center text-3xl font-black uppercase text-base-content" @click="log($page.props.auth)">
+            Data Karyawan
+        </div>
         <div class="mb-4 grid grid-cols-6 gap-x-6 gap-y-4 overflow-hidden">
             <div class="lg:col-span 2 col-span-6 flex flex-wrap items-center sm:col-span-3">
                 <label for="modal-filter" class="btn btn-info mr-2">FIlter</label>
@@ -262,8 +323,20 @@
                     class="col-span-6 !col-end-7 grid grid-cols-2 items-end gap-x-2 sm:col-span-3 lg:col-span-2"
                     v-if="karyawanCheklist.length > 0"
                 >
-                    <button @click="aktifStatus()" class="btn btn-info">aktif checked</button>
-                    <button @click="nonaktifStatus()" class="btn btn-error">nonaktif checked</button>
+                    <button
+                        @click="aktifStatus()"
+                        class="btn btn-info"
+                        :class="{ loading: isLoading && loadingBy == 'aktif' }"
+                    >
+                        aktif checked
+                    </button>
+                    <button
+                        @click="nonaktifStatus()"
+                        class="btn btn-error"
+                        :class="{ loading: isLoading && loadingBy == 'nonaktif' }"
+                    >
+                        nonaktif checked
+                    </button>
                 </div>
             </Transition>
         </div>
@@ -426,9 +499,9 @@
                 <button
                     class="btn"
                     :class="{ 'btn-active': i === page }"
-                    v-for="i in paginateIndex"
+                    v-for="(i, index) in paginateIndex"
                     :key="i"
-                    @click="i === '...' ? (i > page ? page-- : page++) : (page = i)"
+                    @click="i === '...' ? (index === 1 ? page-- : page++) : (page = i)"
                 >
                     {{ i }}
                 </button>
@@ -504,8 +577,10 @@
                         <label for="name" class="mb-2 block">Data Upload : </label>
                         <input
                             type="file"
+                            @input="file.excel = $event.target.files[0]"
                             class="input-text h-11 border file:mr-4 file:h-full file:border-0 file:bg-blue-50 file:py-2 file:px-4 hover:file:bg-blue-100"
                         />
+                        <div class="mt-2 text-sm text-error" v-if="errors.excel">{{ errors.excel }}</div>
                     </div>
                     <div class="col-span-1">
                         <label for="name" class="mb-2 block">Foto Upload : </label>
@@ -518,7 +593,7 @@
                         <label class="label cursor-pointer justify-start">
                             <input
                                 type="checkbox"
-                                checked="checked"
+                                v-model="file.replace"
                                 class="checkbox checkbox-primary checkbox-sm mr-2"
                             />
                             <span class="label-text">Ganti seluruh data</span>
@@ -526,7 +601,13 @@
                     </div>
                     <div class="col-span-1 flex items-center justify-between md:flex-wrap-reverse">
                         <label for="modal-upload" class="max-w-48 btn w-[calc(50%_-_.75rem)]">Batal</label>
-                        <label for="modal-upload" class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]">Upload</label>
+                        <button
+                            @click="import_excel()"
+                            class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]"
+                            :class="{ loading: isLoading && loadingBy == 'import' }"
+                        >
+                            Upload
+                        </button>
                     </div>
                 </div>
             </label>
