@@ -36,6 +36,7 @@
             </div>
             <div class="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
                 <form @submit.prevent="submit" class="card-body">
+                    @csrf
                     <BreezeValidationErrors class="mb-2" />
 
                     <div class="form-control">

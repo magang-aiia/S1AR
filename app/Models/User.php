@@ -22,7 +22,6 @@ class User extends Authenticatable
         'name',
         'npk',
         'email',
-        'role',
         'password',
     ];
 
@@ -52,6 +51,12 @@ class User extends Authenticatable
 
     public function userDetail()
     {
-        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak');
+        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak');   
     }
+
+
+    // public function geIsAdmin()
+    // {
+    //     $this->hasRole('hr');
+    // }
 }

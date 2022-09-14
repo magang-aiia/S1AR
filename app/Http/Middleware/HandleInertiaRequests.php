@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -36,7 +42,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()
             ],
             'ziggy' => function () {
                 return (new Ziggy)->toArray();

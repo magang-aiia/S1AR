@@ -18,7 +18,7 @@
         },
     }
 </script>
-
+@ro
 <template>
     <HeadInertia title="Dashboard" />
 

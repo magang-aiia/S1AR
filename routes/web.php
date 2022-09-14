@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,8 +18,8 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-route::get('/admin/dashboard', [RoleController::class, 'index']);
-route::get('/admin/datadiri', [RoleController::class, 'admin_datadiri']);
+// route::get('/admin/dashboard', [RoleController::class, 'index']);
+// route::get('/admin/datadiri', [RoleController::class, 'admin_datadiri']);
 
 
 Route::get('/', function () {
@@ -57,47 +58,50 @@ Route::get('/approval', function () {
     return Inertia::render('User/Approval');
 })->middleware(['auth', 'verified'])->name('approval');
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'role:hrd'])->prefix('admin')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
-
-    Route::get('/datadiri', function () {
-        return Inertia::render('Admin/Datadiri');
-    })->name('admin.datadiri');
-
-    Route::get('/cuti', function () {
-        return Inertia::render('Admin/Cuti');
-    })->name('admin.cuti');
-
-    Route::get('/izin', function () {
-        return Inertia::render('Admin/Izin');
-    })->name('admin.izin');
-
-    Route::get('/cuzia', function () {
-        return Inertia::render('Admin/Cuzia');
-    })->name('admin.cuzia');
-
-    Route::get('/pengajuan', function () {
-        return Inertia::render('Admin/Pengajuan');
-    })->name('admin.pengajuan');
-
-    Route::get('/absensi', function () {
-        return Inertia::render('Admin/Absensi');
-    })->name('admin.absensi');
-
-    Route::get('/karyawan', function () {
+        Route::get('/dashboard', function () {
+            return Inertia::render('Admin/Dashboard');
+        })->name('admin.dashboard');
+    
+        Route::get('/datadiri', function () {
+            return Inertia::render('Admin/Datadiri');
+        })->name('admin.datadiri');
+    
+        Route::get('/cuti', function () {
+            return Inertia::render('Admin/Cuti');
+        })->name('admin.cuti');
+    
+        Route::get('/izin', function () {
+            return Inertia::render('Admin/Izin');
+        })->name('admin.izin');
+    
+        Route::get('/cuzia', function () {
+            return Inertia::render('Admin/Cuzia');
+        })->name('admin.cuzia');
+    
+        Route::get('/pengajuan', function () {
+            return Inertia::render('Admin/Pengajuan');
+        })->name('admin.pengajuan');
+    
+        Route::get('/absensi', function () {
+            return Inertia::render('Admin/Absensi');
+        })->name('admin.absensi');
+    
+        Route::get('/karyawan', function () {
+            return Inertia::render('Admin/Karyawan');  
         return Inertia::render('Admin/Karyawan');
-    })->name('admin.karyawan');
-    Route::get('karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
-    Route::post('karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
-    Route::post('karyawan/{id}/update_status', [KaryawanController::class, 'update_status'])->name('admin.karyawan.update_status');
-    Route::post('karyawan/aktif_status', [KaryawanController::class, 'aktif_status'])->name('admin.karyawan.aktif_status');
-    Route::post('karyawan/nonaktif_status', [KaryawanController::class, 'nonaktif_status'])->name('admin.karyawan.nonaktif_status');
-    Route::post('karyawan/{id}/update', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
-    Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('admin.karyawan.export');
-    Route::post('karyawan/import', [KaryawanController::class, 'import'])->name('admin.karyawan.import');
+            return Inertia::render('Admin/Karyawan');  
+        })->name('admin.karyawan');
+
+        Route::get('karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
+        Route::post('karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');
+        Route::post('karyawan/{id}/update_status', [KaryawanController::class, 'update_status'])->name('admin.karyawan.update_status');
+        Route::post('karyawan/aktif_status', [KaryawanController::class, 'aktif_status'])->name('admin.karyawan.aktif_status');
+        Route::post('karyawan/nonaktif_status', [KaryawanController::class, 'nonaktif_status'])->name('admin.karyawan.nonaktif_status');
+        Route::post('karyawan/{id}/update', [KaryawanController::class, 'update'])->name('admin.karyawan.update');
+        Route::get('karyawan/export', [KaryawanController::class, 'export'])->name('admin.karyawan.export');
+        Route::post('karyawan/import', [KaryawanController::class, 'import'])->name('admin.karyawan.import');
 });
 require __DIR__ . '/auth.php';
 
