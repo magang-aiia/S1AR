@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Departemen;
+use App\Models\Jabatan;
 use App\Models\Kontrak;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,7 +28,6 @@ class UserDetailFactory extends Factory
             'tgl_lahir' => $this->faker->date(),
             'tgl_bergabung' => $this->faker->dateTimeBetween('-8 years', 'now'),
             'departemen_id' => $this->faker->randomElement($departemen),
-            'jabatan' => 'jabatan',
             'kontrak_id' => $this->faker->randomElement($kontrak),
             'gol' => $this->faker->randomElement([1,2]),
             'sta_kerja' => 'status',

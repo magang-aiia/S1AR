@@ -22,6 +22,7 @@ class User extends Authenticatable
         'npk',
         'email',
         'password',
+        'jabatan_id',
     ];
 
     /**
@@ -48,8 +49,18 @@ class User extends Authenticatable
         return $this->hasMany(Mading::class);
     }
 
-    public function userDetail()
+    public function user_detail()
     {
-        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak');
+        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak', 'jabatan');
+    }
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class)->with('level_user', 'atasan_atasan');
+    }
+
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class)->with('shift');
     }
 }

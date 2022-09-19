@@ -1,100 +1,115 @@
 <script>
-    import moment from "moment"
+import moment from "moment";
 
-    const route = window.route
+const route = window.route;
 
-    export default {
-        name: "ModalCuzia",
-        inheritAttrs: false,
-        props: {
-            modalDetailCutiData: {
-                type: Object,
-                default: () => ({}),
-            },
-            modalDetailIzinData: {
-                type: Object,
-                default: () => ({}),
-            },
-            modalDetailDatadiriData: {
-                type: Object,
-                default: () => ({}),
-            },
-            modalEditDetailDatadiriData: {
-                type: Object,
-                default: () => ({}),
-            },
-            departemen: Object,
-            kontrak: Object,
-            isApprovable: {
-                type: Boolean,
-                default: false,
-            },
+export default {
+    name: "ModalCuzia",
+    inheritAttrs: false,
+    props: {
+        modalDetailCutiData: {
+            type: Object,
+            default: () => ({}),
         },
-        data() {
-            return {
-                modalDetailCuti: false,
-                modalDetailIzin: false,
-                modalDetailDatadiri: false,
-                modalConfirm: false,
-                modalAddDetailDatadiri: false,
-                modalEditDetailDatadiri: false,
-                editKaryawan: {},
-                errors: {},
-            }
+        modalDetailIzinData: {
+            type: Object,
+            default: () => ({}),
         },
-        methods: {
-            reset() {
-                setTimeout(() => {
-                    this.modalDetailCuti = false
-                    this.modalDetailIzin = false
-                    this.modalDetailDatadiri = false
-                }, 300)
-            },
-            habisKontrak(tglGabung, lamaBulan) {
-                return moment(tglGabung).add(lamaBulan, "months").format("YYYY-MM-DD")
-            },
-            log(data) {
-                console.log(data)
-            },
-            lamaKontrak(kontrakId) {
-                return this.kontrak.find((item) => item.id === kontrakId).lama_kontrak
-            },
-            tambahKaryawan() {
-                this.$inertia.post(route("admin.karyawan.store"), this.editKaryawan, {
-                    preserveScroll: true,
-                    preserveState: true,
-                    onError: (page) => {
-                        this.errors = page
-                    },
-                    onSuccess: () => {
-                        this.editKaryawan = {}
-                        this.modalAddDetailDatadiri = false
-                    },
-                })
-            },
-            updateKaryawan() {
-                this.$inertia.post(route("admin.karyawan.update", this.editKaryawan.id), this.editKaryawan, {
-                    preserveScroll: true,
-                    preserveState: true,
-                    onError: (page) => {
-                        this.errors = page
-                    },
-                    onSuccess: () => {
-                        this.editKaryawan = {}
-                        this.modalEditDetailDatadiri = false
-                    },
-                })
-            },
+        modalDetailDatadiriData: {
+            type: Object,
+            default: () => ({}),
         },
-        watch: {
-            modalEditDetailDatadiriData: {
-                handler() {
-                    this.editKaryawan = this.modalEditDetailDatadiriData
+        modalEditDetailDatadiriData: {
+            type: Object,
+            default: () => ({}),
+        },
+        departemen: Object,
+        kontrak: Object,
+        isApprovable: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    data() {
+        return {
+            modalDetailCuti: false,
+            modalDetailIzin: false,
+            modalDetailDatadiri: false,
+            modalConfirm: false,
+            modalAddDetailDatadiri: false,
+            modalEditDetailDatadiri: false,
+            editKaryawan: {},
+            errors: {},
+            avatar: null,
+            avatarUrl: null,
+        };
+    },
+    methods: {
+        reset() {
+            setTimeout(() => {
+                this.modalDetailCuti = false;
+                this.modalDetailIzin = false;
+                this.modalDetailDatadiri = false;
+            }, 300);
+        },
+        habisKontrak(tglGabung, lamaBulan) {
+            return moment(tglGabung).add(lamaBulan, "months").format("YYYY-MM-DD");
+        },
+        log(data) {
+            console.log(data);
+        },
+        changeAvatar(event) {
+            this.avatar = event.target.files[0];
+            this.editKaryawan.avatar = this.avatar;
+            this.avatarUrl = URL.createObjectURL(event.target.files[0]);
+        },
+        lamaKontrak(kontrakId) {
+            return this.kontrak.find((item) => item.id === kontrakId).lama_kontrak;
+        },
+        tambahKaryawan() {
+            this.$inertia.post(route("admin.karyawan.store"), this.editKaryawan, {
+                preserveScroll: true,
+                preserveState: true,
+                forceFormData: true,
+                onError: (page) => {
+                    this.errors = page;
                 },
-                deep: true,
-            },
+                onSuccess: () => {
+                    this.errors = {};
+                    this.editKaryawan = {};
+                    this.modalAddDetailDatadiri = false;
+                    this.avatar = null;
+                    this.avatarUrl = null;
+                },
+            });
         },
-    }
+        updateKaryawan() {
+            this.$inertia.post(route("admin.karyawan.update", this.editKaryawan.id), this.editKaryawan, {
+                preserveScroll: true,
+                preserveState: true,
+                forceFormData: true,
+                onError: (page) => {
+                    this.errors = page;
+                },
+                onSuccess: () => {
+                    this.errors = {};
+                    this.editKaryawan = {};
+                    this.modalEditDetailDatadiri = false;
+                    this.avatar = null;
+                    this.avatarUrl = null;
+                },
+            });
+        },
+    },
+    watch: {
+        modalEditDetailDatadiriData: {
+            handler() {
+                this.editKaryawan = this.modalEditDetailDatadiriData;
+            },
+            deep: true,
+        },
+    },
+};
 </script>
 
 <template>
@@ -385,10 +400,21 @@
             <label for="" v-if="modalAddDetailDatadiri" class="modal-box relative w-11/12 max-w-6xl">
                 <div class="mb-3 text-center text-3xl font-semibold">Tambah Data Karyawan</div>
                 <div class="mb-6 flex flex-wrap items-center -md:flex-col -md:justify-center">
-                    <div
-                        class="mr-3 w-36 overflow-hidden rounded-full border-4 border-gray-300 dark:border-gray-800 -md:mb-3 -md:w-48"
-                    >
-                        <img src="/img/avatar.jpg" />
+                    <div class="relative mr-3 w-36 -md:mb-3 -md:w-48">
+                        <div
+                            class="relative flex h-36 w-36 items-center overflow-hidden rounded-full border-4 border-gray-300 dark:border-gray-800 -md:h-48 -md:w-48"
+                        >
+                            <img class="absolute min-h-full min-w-full blur" :src="avatarUrl" v-if="avatar" />
+                            <img class="absolute min-h-full min-w-full blur" src="/assets/image/avatar.jpg" v-else />
+                            <img class="z-[1]" :src="avatarUrl" v-if="avatar" />
+                            <img class="z-[1]" src="/assets/image/avatar.jpg" v-else />
+                        </div>
+                        <label
+                            class="btn btn-primary absolute -bottom-1 -right-1 z-[2] h-12 w-12 rounded-full border-4 border-base-100 p-0 hover:border-base-100"
+                        >
+                            <box-icon name="edit" class="fill-base-content" size="sm"></box-icon>
+                            <input type="file" class="hidden" @input="changeAvatar($event)" />
+                        </label>
                     </div>
                     <div class="max-w-[calc(100%_-_11rem)] -md:max-w-sm -md:text-center">
                         <div class="max-w-full truncate text-2xl font-bold md:text-4xl">{{ editKaryawan.nama }}</div>
@@ -577,10 +603,25 @@
             <label for="" v-if="modalEditDetailDatadiri" class="modal-box relative w-11/12 max-w-6xl">
                 <div class="mb-3 text-center text-3xl font-semibold">Edit Data Karyawan</div>
                 <div class="mb-6 flex flex-wrap items-center -md:flex-col -md:justify-center">
-                    <div
-                        class="mr-3 w-36 overflow-hidden rounded-full border-4 border-gray-300 dark:border-gray-800 -md:mb-3 -md:w-48"
-                    >
-                        <img src="/img/avatar.jpg" />
+                    <div class="relative mr-3 w-36 -md:mb-3 -md:w-48">
+                        <div
+                            class="relative flex h-36 w-36 items-center overflow-hidden rounded-full border-4 border-gray-300 dark:border-gray-800 -md:h-48 -md:w-48"
+                        >
+                            <img class="absolute min-h-full min-w-full blur" :src="avatarUrl" v-if="avatar" />
+                            <img
+                                class="absolute min-h-full min-w-full blur"
+                                :src="'/assets/image/' + editKaryawan.user.avatar"
+                                v-else
+                            />
+                            <img class="z-[1]" :src="avatarUrl" v-if="avatar" />
+                            <img class="z-[1]" :src="'/assets/image/' + editKaryawan.user.avatar" v-else />
+                        </div>
+                        <label
+                            class="btn btn-primary absolute -bottom-1 -right-1 z-[2] h-12 w-12 rounded-full border-4 border-base-100 p-0 hover:border-base-100"
+                        >
+                            <box-icon name="edit" class="fill-base-content" size="sm"></box-icon>
+                            <input type="file" class="hidden" @input="changeAvatar($event)" />
+                        </label>
                     </div>
                     <div class="max-w-[calc(100%_-_11rem)] -md:max-w-sm -md:text-center">
                         <div class="max-w-full truncate text-2xl font-bold md:text-4xl">{{ editKaryawan.nama }}</div>

@@ -25,14 +25,6 @@ function getNav(parentActive = "", childActive = "") {
             child: [],
         },
         {
-            name: "Pengajuan",
-            active: parentActive === "pengajuan",
-            to: "admin.pengajuan",
-            icon: "message-alt-edit",
-            iconType: "regular",
-            child: [],
-        },
-        {
             name: "Karyawan",
             active: parentActive === "karyawan",
             to: "admin.karyawan",
@@ -40,7 +32,7 @@ function getNav(parentActive = "", childActive = "") {
             iconType: "regular",
             child: [],
         },
-    ]
+    ];
 }
 
-export default getNav
+export default getNav;

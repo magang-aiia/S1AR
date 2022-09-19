@@ -1,26 +1,26 @@
 <script setup>
-    import BreezeValidationErrors from "@/Components/ValidationErrors.vue"
-    import { Head, useForm } from "@inertiajs/inertia-vue3"
-    import BreezeCheckbox from "@/Components/Checkbox.vue"
+import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
+import BreezeCheckbox from "@/Components/Checkbox.vue";
 
-    defineProps({
-        canResetPassword: Boolean,
-        status: String,
-    })
+defineProps({
+    canResetPassword: Boolean,
+    status: String,
+});
 
-    const route = window.route
+const route = window.route;
 
-    const form = useForm({
-        npk: "",
-        password: "",
-        remember: false,
-    })
+const form = useForm({
+    npk: "",
+    password: "",
+    remember: false,
+});
 
-    const submit = () => {
-        form.post(route("login"), {
-            onFinish: () => form.reset("password"),
-        })
-    }
+const submit = () => {
+    form.post(route("login"), {
+        onFinish: () => form.reset("password"),
+    });
+};
 </script>
 
 <template>

@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->default('avatar.jpg');
+            $table->foreignId('jabatan_id')->constrained('jabatans')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

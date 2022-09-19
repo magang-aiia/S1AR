@@ -1,20 +1,26 @@
 <script>
-    import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
-    import getNav from "@/Pages/User/NavUser.js"
+import MainLayout from "@/Layouts/Main.vue";
+import { Head as HeadInertia } from "@inertiajs/inertia-vue3";
+import getNav from "@/Pages/User/NavUser.js";
 
-    export default {
-        components: {
-            MainLayout,
-            HeadInertia,
-        },
-        data() {
-            return {
-                nav: getNav("pengajuan", "cuti"),
-            }
-        },
-        methods: {},
-    }
+export default {
+    components: {
+        MainLayout,
+        HeadInertia,
+    },
+    props: {
+        isAtasan: Boolean,
+    },
+    data() {
+        return {
+            nav: [],
+        };
+    },
+    mounted() {
+        this.nav = getNav("pengajuan", "cuti", this.isAtasan);
+    },
+    methods: {},
+};
 </script>
 
 <template>

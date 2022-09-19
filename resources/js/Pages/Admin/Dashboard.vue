@@ -1,103 +1,103 @@
 <script>
-    import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3"
-    import getNav from "@/Pages/Admin/NavAdmin.js"
-    import VueApexCharts from "vue3-apexcharts"
+import MainLayout from "@/Layouts/Main.vue";
+import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3";
+import getNav from "@/Pages/Admin/NavAdmin.js";
+import VueApexCharts from "vue3-apexcharts";
 
-    export default {
-        components: {
-            MainLayout,
-            HeadInertia,
-            LinkInertia,
-            apexchart: VueApexCharts,
-        },
-        data() {
-            return {
-                nav: getNav("dashboard"),
-                isMounted: false,
-                series: [
-                    {
-                        name: "Cuti",
-                        data: [31, 40, 28, 51, 42, 67, 90],
-                    },
-                    {
-                        name: "Izin",
-                        data: [11, 32, 45, 32, 34, 52, 41],
-                    },
-                    {
-                        name: "Data diri",
-                        data: [16, 9, 21, 18, 29, 36, 32],
-                    },
-                ],
-                series2: [1367, 128, 23],
-                chartOptions: {
-                    chart: {
-                        type: "area",
-                    },
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    stroke: {
-                        curve: "smooth",
-                    },
-                    xaxis: {
-                        type: "datetime",
-                        categories: [
-                            "2022-01-19",
-                            "2022-02-20",
-                            "2022-03-21",
-                            "2022-04-22",
-                            "2022-05-23",
-                            "2022-06-24",
-                            "2022-07-25",
-                        ],
-                    },
-                    tooltip: {
-                        x: {
-                            format: "dd MMMM yyyy",
-                        },
+export default {
+    components: {
+        MainLayout,
+        HeadInertia,
+        LinkInertia,
+        apexchart: VueApexCharts,
+    },
+    data() {
+        return {
+            nav: getNav("dashboard"),
+            isMounted: false,
+            series: [
+                {
+                    name: "Cuti",
+                    data: [31, 40, 28, 51, 42, 67, 90],
+                },
+                {
+                    name: "Izin",
+                    data: [11, 32, 45, 32, 34, 52, 41],
+                },
+                {
+                    name: "Data diri",
+                    data: [16, 9, 21, 18, 29, 36, 32],
+                },
+            ],
+            series2: [1367, 128, 23],
+            chartOptions: {
+                chart: {
+                    type: "area",
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    curve: "smooth",
+                },
+                xaxis: {
+                    type: "datetime",
+                    categories: [
+                        "2022-01-19",
+                        "2022-02-20",
+                        "2022-03-21",
+                        "2022-04-22",
+                        "2022-05-23",
+                        "2022-06-24",
+                        "2022-07-25",
+                    ],
+                },
+                tooltip: {
+                    x: {
+                        format: "dd MMMM yyyy",
                     },
                 },
-                chartOptions2: {
-                    chart: {
-                        type: "donut",
-                    },
-                    colors: ["#36d399", "#f87272", "#fbbd23"],
-                    dataLabels: {
-                        enabled: true,
-                    },
-                    labels: ["Ajuan Disetujui", "Ajuan Ditolak", "Ajuan Menunggu"],
+            },
+            chartOptions2: {
+                chart: {
+                    type: "donut",
                 },
-            }
-        },
-        mounted() {
-            this.isMounted = true
-        },
-        unmounted() {
-            this.isMounted = false
-        },
-        computed: {
-            theme() {
-                if (this.isMounted) {
-                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                        return "dark"
-                    } else {
-                        return "light"
-                    }
-                } else return null
+                colors: ["#36d399", "#f87272", "#fbbd23"],
+                dataLabels: {
+                    enabled: true,
+                },
+                labels: ["Ajuan Disetujui", "Ajuan Ditolak", "Ajuan Menunggu"],
             },
-            chartOptionsComputed() {
-                const x = this.chartOptions
-                x.theme = { mode: this.theme }
-                return x
-            },
-            chartOptions2Computed() {
-                const x = this.chartOptions2
-                x.theme = { mode: this.theme }
-                return x
-            },
+        };
+    },
+    mounted() {
+        this.isMounted = true;
+    },
+    unmounted() {
+        this.isMounted = false;
+    },
+    computed: {
+        theme() {
+            if (this.isMounted) {
+                if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                    return "dark";
+                } else {
+                    return "light";
+                }
+            } else return null;
         },
-    }
+        chartOptionsComputed() {
+            const x = this.chartOptions;
+            x.theme = { mode: this.theme };
+            return x;
+        },
+        chartOptions2Computed() {
+            const x = this.chartOptions2;
+            x.theme = { mode: this.theme };
+            return x;
+        },
+    },
+};
 </script>
 
 <template>

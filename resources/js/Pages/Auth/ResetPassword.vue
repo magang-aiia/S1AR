@@ -1,30 +1,30 @@
 <script setup>
-    import BreezeButton from "@/Components/Button.vue"
-    import BreezeGuestLayout from "@/Layouts/Guest.vue"
-    import BreezeInput from "@/Components/Input.vue"
-    import BreezeLabel from "@/Components/Label.vue"
-    import BreezeValidationErrors from "@/Components/ValidationErrors.vue"
-    import { Head, useForm } from "@inertiajs/inertia-vue3"
+import BreezeButton from "@/Components/Button.vue";
+import BreezeGuestLayout from "@/Layouts/Guest.vue";
+import BreezeInput from "@/Components/Input.vue";
+import BreezeLabel from "@/Components/Label.vue";
+import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
 
-    const props = defineProps({
-        email: String,
-        token: String,
-    })
+const props = defineProps({
+    email: String,
+    token: String,
+});
 
-    const route = window.route
+const route = window.route;
 
-    const form = useForm({
-        token: props.token,
-        email: props.email,
-        password: "",
-        password_confirmation: "",
-    })
+const form = useForm({
+    token: props.token,
+    email: props.email,
+    password: "",
+    password_confirmation: "",
+});
 
-    const submit = () => {
-        form.post(route("password.update"), {
-            onFinish: () => form.reset("password", "password_confirmation"),
-        })
-    }
+const submit = () => {
+    form.post(route("password.update"), {
+        onFinish: () => form.reset("password", "password_confirmation"),
+    });
+};
 </script>
 
 <template>

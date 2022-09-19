@@ -1,37 +1,37 @@
 <script setup>
-    import { Link, useForm } from "@inertiajs/inertia-vue3"
-    import { ref } from "vue"
+import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
 
-    defineProps({
-        nav: {
-            type: Array,
-            default: null,
-        },
-        sidebar: {
-            type: Boolean,
-            default: false,
-        },
-    })
+defineProps({
+    nav: {
+        type: Array,
+        default: null,
+    },
+    sidebar: {
+        type: Boolean,
+        default: false,
+    },
+});
 
-    const route = window.route
+const route = window.route;
 
-    const modalpass = ref(false)
+const modalpass = ref(false);
 
-    const form = useForm({
-        old_password: "",
-        new_password: "",
-        confirm_password: "",
-    })
+const form = useForm({
+    old_password: "",
+    new_password: "",
+    confirm_password: "",
+});
 
-    const submit = () => {
-        console.log(form.old_password)
-        console.log(form.new_password)
-        console.log(form.confirm_password)
-        form.reset("old_password")
-        form.reset("new_password")
-        form.reset("confirm_password")
-        modalpass.value = false
-    }
+const submit = () => {
+    console.log(form.old_password);
+    console.log(form.new_password);
+    console.log(form.confirm_password);
+    form.reset("old_password");
+    form.reset("new_password");
+    form.reset("confirm_password");
+    modalpass.value = false;
+};
 </script>
 
 <template>

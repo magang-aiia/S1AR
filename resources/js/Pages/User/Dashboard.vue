@@ -1,22 +1,28 @@
 <script>
-    import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3"
-    import getNav from "@/Pages/User/NavUser.js"
+import MainLayout from "@/Layouts/Main.vue";
+import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3";
+import getNav from "@/Pages/User/NavUser.js";
 
-    export default {
-        components: {
-            MainLayout,
-            HeadInertia,
-            LinkInertia,
-        },
-        data() {
-            return {
-                nav: getNav("dashboard"),
-                modalCutiTahunan: false,
-                modalCutiIstimewa: false,
-            }
-        },
-    }
+export default {
+    components: {
+        MainLayout,
+        HeadInertia,
+        LinkInertia,
+    },
+    props: {
+        isAtasan: Boolean,
+    },
+    data() {
+        return {
+            nav: [],
+            modalCutiTahunan: false,
+            modalCutiIstimewa: false,
+        };
+    },
+    mounted() {
+        this.nav = getNav("dashboard", undefined, this.isAtasan);
+    },
+};
 </script>
 
 <template>

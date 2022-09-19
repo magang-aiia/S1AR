@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\KaryawanController;
-use App\Http\Controllers\MadingController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\MadingController;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\KaryawanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,39 +23,52 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('root');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('User/Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified', 'can:isUser'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('User/Dashboard', [
+            'isAtasan' => Gate::allows('isAtasan'),
+        ]);
+    })->name('dashboard');
 
-Route::get('/datadiri', function () {
-    return Inertia::render('User/Datadiri');
-})->middleware(['auth', 'verified'])->name('datadiri');
+    Route::get('/datadiri', function () {
+        return Inertia::render('User/Datadiri', [
+            'isAtasan' => Gate::allows('isAtasan'),
+        ]);
+    })->name('datadiri');
 
-Route::get('/cuti', function () {
-    return Inertia::render('User/Cuti');
-})->middleware(['auth', 'verified'])->name('cuti');
+    Route::get('/cuti', function () {
+        return Inertia::render('User/Cuti', [
+            'isAtasan' => Gate::allows('isAtasan'),
+        ]);
+    })->name('cuti');
 
-Route::get('/izin', function () {
-    return Inertia::render('User/Izin');
-})->middleware(['auth', 'verified'])->name('izin');
+    Route::get('/izin', function () {
+        return Inertia::render('User/Izin', [
+            'isAtasan' => Gate::allows('isAtasan'),
+        ]);
+    })->name('izin');
 
-Route::get('/history', function () {
-    return Inertia::render('User/History');
-})->middleware(['auth', 'verified'])->name('history');
+    Route::get('/history', function () {
+        return Inertia::render('User/History', [
+            'isAtasan' => Gate::allows('isAtasan'),
+        ]);
+    })->name('history');
 
-Route::get('/absensi', function () {
-    return Inertia::render('User/Absensi');
-})->middleware(['auth', 'verified'])->name('absensi');
+    Route::get('/absensi', [AbsensiController::class, 'user_index'])->name('absensi');
+
+    Route::get('/approval', function () {
+        return Inertia::render('User/Approval');
+    })->middleware('can:isAtasan')->name('approval');
+});
 
 Route::get('/notification', function () {
-    return Inertia::render('Notification');
+    return Inertia::render('Notification', [
+        'isAtasan' => Gate::allows('isAtasan'),
+        'isAdmin' => Gate::allows('isAdmin'),
+    ]);
 })->middleware(['auth', 'verified'])->name('notification');
 
-Route::get('/approval', function () {
-    return Inertia::render('User/Approval');
-})->middleware(['auth', 'verified'])->name('approval');
-
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'can:isAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
@@ -78,9 +93,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         return Inertia::render('Admin/Pengajuan');
     })->name('admin.pengajuan');
 
-    Route::get('/absensi', function () {
-        return Inertia::render('Admin/Absensi');
-    })->name('admin.absensi');
+    Route::get('absensi', [AbsensiController::class, 'admin_index'])->name('admin.absensi');
+    Route::get('absensi/export', [AbsensiController::class, 'export'])->name('admin.absensi.export');
+    Route::post('absensi/import', [AbsensiController::class, 'import'])->name('admin.absensi.import');
 
     Route::get('karyawan', [KaryawanController::class, 'index'])->name('admin.karyawan');
     Route::post('karyawan', [KaryawanController::class, 'store'])->name('admin.karyawan.store');

@@ -1,20 +1,20 @@
 <script>
-    import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
-    import getNav from "@/Pages/Admin/NavAdmin.js"
+import MainLayout from "@/Layouts/Main.vue";
+import { Head as HeadInertia } from "@inertiajs/inertia-vue3";
+import getNav from "@/Pages/Admin/NavAdmin.js";
 
-    export default {
-        components: {
-            MainLayout,
-            HeadInertia,
-        },
-        data() {
-            return {
-                nav: getNav("pengajuan"),
-            }
-        },
-        methods: {},
-    }
+export default {
+    components: {
+        MainLayout,
+        HeadInertia,
+    },
+    data() {
+        return {
+            nav: getNav("pengajuan"),
+        };
+    },
+    methods: {},
+};
 </script>
 
 <template>

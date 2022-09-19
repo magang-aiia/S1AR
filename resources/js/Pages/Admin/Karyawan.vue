@@ -1,307 +1,308 @@
 <script>
-    import MainLayout from "@/Layouts/Main.vue"
-    import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
-    import getNav from "@/Pages/Admin/NavAdmin.js"
-    import moment from "moment"
-    import ModalCuzia from "@/Components/ModalCuzia.vue"
+import MainLayout from "@/Layouts/Main.vue";
+import { Head as HeadInertia } from "@inertiajs/inertia-vue3";
+import getNav from "@/Pages/Admin/NavAdmin.js";
+import moment from "moment";
+import ModalCuzia from "@/Components/ModalCuzia.vue";
 
-    const route = window.route
+const route = window.route;
 
-    export default {
-        components: {
-            MainLayout,
-            HeadInertia,
-            ModalCuzia,
+export default {
+    components: {
+        MainLayout,
+        HeadInertia,
+        ModalCuzia,
+    },
+    props: {
+        karyawan: {
+            type: Object,
+            default: () => {},
         },
-        props: {
-            karyawan: {
-                type: Object,
-                default: () => {},
+        departemen: Object,
+        kontrak: Object,
+    },
+    data() {
+        return {
+            nav: getNav("karyawan"),
+            isMounted: false,
+            data: [],
+            karyawanCheklist: [],
+            isAllChecked: false,
+            selectedKaryawan: null,
+            file: {
+                excel: null,
+                foto: null,
+                replace: false,
             },
-            departemen: Object,
-            kontrak: Object,
-        },
-        data() {
-            return {
-                nav: getNav("karyawan"),
-                isMounted: false,
-                data: [],
-                karyawanCheklist: [],
-                isAllChecked: false,
-                selectedKaryawan: null,
-                file: {
-                    excel: null,
-                    foto: null,
-                    replace: false,
-                },
-                isLoading: false,
-                loadingBy: null,
-                errors: {},
-                sortBy: "npk",
-                isNew: false,
-                sortDesc: false,
-                slice: 30,
-                page: 1,
-                modalFilter: false,
-                modalUpload: false,
-                filter: {
-                    nama: "",
-                    npkfrom: "",
-                    npkto: "",
-                    tglfrom: "",
-                    tglto: "",
-                    email: "",
-                    no_hp: "",
-                    status: "",
-                },
+            isLoading: false,
+            loadingBy: null,
+            errors: {},
+            sortBy: "npk",
+            isNew: false,
+            sortDesc: false,
+            slice: 30,
+            page: 1,
+            modalFilter: false,
+            modalUpload: false,
+            filter: {
+                nama: "",
+                npkfrom: "",
+                npkto: "",
+                tglfrom: "",
+                tglto: "",
+                email: "",
+                no_hp: "",
+                status: "",
+            },
+        };
+    },
+    mounted() {
+        this.isMounted = true;
+        moment.locale("id");
+    },
+    unmounted() {
+        this.isMounted = false;
+    },
+    methods: {
+        sorted(by) {
+            if (this.sortBy === by) {
+                this.sortDesc = !this.sortDesc;
+            } else {
+                this.sortBy = by;
             }
         },
-        mounted() {
-            this.isMounted = true
-            moment.locale("id")
+        log(data) {
+            console.log(data);
         },
-        unmounted() {
-            this.isMounted = false
+        uniqeData(key) {
+            return [...new Set(this.data.map((item) => item[key]))];
         },
-        methods: {
-            sorted(by) {
-                if (this.sortBy === by) {
-                    this.sortDesc = !this.sortDesc
-                } else {
-                    this.sortBy = by
-                }
-            },
-            log(data) {
-                console.log(data)
-            },
-            uniqeData(key) {
-                return [...new Set(this.data.map((item) => item[key]))]
-            },
-            columnType(key) {
-                if (moment(this.data[0][key]).isValid()) {
-                    return "date"
-                } else if (!isNaN(this.data[0][key])) {
-                    return "number"
-                } else {
-                    return "string"
-                }
-            },
-            filterNumber(number, from, to) {
-                if (from && to) {
-                    return number >= from && number <= to
-                } else if (from) {
-                    return number >= from
-                } else if (to) {
-                    return number <= to
-                } else {
-                    return true
-                }
-            },
-            filterDate(date, from, to) {
-                if (from && to) {
-                    return moment(date).isBetween(from, to)
-                } else if (from) {
-                    return moment(date).isSameOrAfter(from)
-                } else if (to) {
-                    return moment(date).isSameOrBefore(to)
-                } else {
-                    return true
-                }
-            },
-            checkAll() {
-                this.isAllChecked = !this.isAllChecked
-                this.karyawanCheklist = this.isAllChecked ? this.dataSorted.map((item) => item.user_id) : []
-            },
-            updateStatus(id) {
-                this.$inertia.post(
-                    route("admin.karyawan.update_status", id),
-                    {},
-                    {
-                        preserveState: true,
-                        preserveScroll: true,
-                        onStart: () => {
-                            this.isLoading = true
-                            this.loadingBy = id
-                        },
-                        onFinish: () => {
-                            this.isLoading = false
-                            this.loadingBy = null
-                        },
-                    }
-                )
-            },
-            aktifStatus() {
-                this.$inertia.post(
-                    route("admin.karyawan.aktif_status"),
-                    {
-                        karyawan_list: this.karyawanCheklist,
-                    },
-                    {
-                        preserveState: true,
-                        preserveScroll: true,
-                        onStart: () => {
-                            this.isLoading = true
-                            this.loadingBy = "aktif"
-                        },
-                        onFinish: () => {
-                            this.isLoading = false
-                            this.loadingBy = null
-                        },
-                    }
-                )
-            },
-            nonaktifStatus() {
-                this.$inertia.post(
-                    route("admin.karyawan.nonaktif_status"),
-                    {
-                        karyawan_list: this.karyawanCheklist,
-                    },
-                    {
-                        preserveState: true,
-                        preserveScroll: true,
-                        onStart: () => {
-                            this.isLoading = true
-                            this.loadingBy = "nonaktif"
-                        },
-                        onFinish: () => {
-                            this.isLoading = false
-                            this.loadingBy = null
-                        },
-                    }
-                )
-            },
-            export_excel() {
-                window.open(route("admin.karyawan.export"))
-            },
-            import_excel() {
-                this.$inertia.post(route("admin.karyawan.import"), this.file, {
+        columnType(key) {
+            if (moment(this.data[0][key]).isValid()) {
+                return "date";
+            } else if (!isNaN(this.data[0][key])) {
+                return "number";
+            } else {
+                return "string";
+            }
+        },
+        filterNumber(number, from, to) {
+            if (from && to) {
+                return number >= from && number <= to;
+            } else if (from) {
+                return number >= from;
+            } else if (to) {
+                return number <= to;
+            } else {
+                return true;
+            }
+        },
+        filterDate(date, from, to) {
+            if (from && to) {
+                return moment(date).isBetween(from, to);
+            } else if (from) {
+                return moment(date).isSameOrAfter(from);
+            } else if (to) {
+                return moment(date).isSameOrBefore(to);
+            } else {
+                return true;
+            }
+        },
+        checkAll() {
+            this.isAllChecked = !this.isAllChecked;
+            this.karyawanCheklist = this.isAllChecked ? this.dataSorted.map((item) => item.user_id) : [];
+        },
+        updateStatus(id) {
+            this.$inertia.post(
+                route("admin.karyawan.update_status", id),
+                {},
+                {
                     preserveState: true,
                     preserveScroll: true,
-                    forceFormData: true,
                     onStart: () => {
-                        this.isLoading = true
-                        this.loadingBy = "import"
-                    },
-                    onError: (error) => {
-                        this.errors = error
-                        this.loadingBy = null
-                        this.modalUpload = false
-                    },
-                    onSuccess: () => {
-                        this.file.excel = null
-                        this.file.replace = false
-                        this.isLoading = false
-                        this.loadingBy = null
-                        this.modalUpload = false
+                        this.isLoading = true;
+                        this.loadingBy = id;
                     },
                     onFinish: () => {
-                        this.isLoading = false
-                        this.loadingBy = null
+                        this.isLoading = false;
+                        this.loadingBy = null;
                     },
-                })
-            },
+                }
+            );
         },
-        computed: {
-            columnKeys() {
-                return Object.keys(this.data[0])
-            },
-            transformData() {
-                return this.data.map((data) => {
-                    data.tgl_bergabung_semantic = moment(data.tgl_bergabung).format("DD MMMM YYYY")
-                    data.nama = data.user.name
-                    data.email = data.user.email
-                    data.npk = data.user.npk
-                    return data
-                })
-            },
-            filterData() {
-                return this.transformData.filter((item) => {
-                    if (this.isMounted) {
-                        return (
-                            item.nama.toLowerCase().includes(this.filter.nama.toLowerCase()) &&
+        aktifStatus() {
+            this.$inertia.post(
+                route("admin.karyawan.aktif_status"),
+                {
+                    karyawan_list: this.karyawanCheklist,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onStart: () => {
+                        this.isLoading = true;
+                        this.loadingBy = "aktif";
+                    },
+                    onFinish: () => {
+                        this.isLoading = false;
+                        this.loadingBy = null;
+                    },
+                }
+            );
+        },
+        nonaktifStatus() {
+            this.$inertia.post(
+                route("admin.karyawan.nonaktif_status"),
+                {
+                    karyawan_list: this.karyawanCheklist,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onStart: () => {
+                        this.isLoading = true;
+                        this.loadingBy = "nonaktif";
+                    },
+                    onFinish: () => {
+                        this.isLoading = false;
+                        this.loadingBy = null;
+                    },
+                }
+            );
+        },
+        export_excel() {
+            window.open(route("admin.karyawan.export"));
+        },
+        import_excel() {
+            this.$inertia.post(route("admin.karyawan.import"), this.file, {
+                preserveState: true,
+                preserveScroll: true,
+                forceFormData: true,
+                onStart: () => {
+                    this.isLoading = true;
+                    this.loadingBy = "import";
+                },
+                onError: (error) => {
+                    this.errors = error;
+                    this.isLoading = false;
+                    this.loadingBy = null;
+                },
+                onSuccess: () => {
+                    this.file.excel = null;
+                    this.file.replace = false;
+                    this.isLoading = false;
+                    this.loadingBy = null;
+                    this.modalUpload = false;
+                    this.errors = {};
+                },
+                onFinish: () => {
+                    this.isLoading = false;
+                    this.loadingBy = null;
+                },
+            });
+        },
+    },
+    computed: {
+        columnKeys() {
+            return Object.keys(this.data[0]);
+        },
+        transformData() {
+            return this.data.map((data) => {
+                data.tgl_bergabung_semantic = moment(data.tgl_bergabung).format("DD MMMM YYYY");
+                data.nama = data.user.name;
+                data.email = data.user.email;
+                data.npk = data.user.npk;
+                return data;
+            });
+        },
+        filterData() {
+            return this.transformData.filter((item) => {
+                if (this.isMounted) {
+                    return (
+                        item.nama.toLowerCase().includes(this.filter.nama.toLowerCase()) &&
                             this.filterNumber(item.npk, this.filter.npkfrom, this.filter.npkto) &&
                             this.filterDate(item.tgl_bergabung, this.filter.tglfrom, this.filter.tglto) &&
                             item.email.toLowerCase().includes(this.filter.email.toLowerCase()) &&
                             item.no_hp.toLowerCase().includes(this.filter.no_hp.toLowerCase()) &&
                             item.status.toLowerCase().indexOf(this.filter.status.toLowerCase()) === 0
-                        )
+                    );
+                } else {
+                    return true;
+                }
+            });
+        },
+        dataSorted() {
+            return this.filterData
+                .slice(0)
+                .sort((a, b) => {
+                    if (this.sortDesc) {
+                        return a[this.sortBy] < b[this.sortBy] ? 1 : -1;
                     } else {
-                        return true
+                        return a[this.sortBy] > b[this.sortBy] ? 1 : -1;
                     }
                 })
-            },
-            dataSorted() {
-                return this.filterData
-                    .slice(0)
-                    .sort((a, b) => {
-                        if (this.sortDesc) {
-                            return a[this.sortBy] < b[this.sortBy] ? 1 : -1
-                        } else {
-                            return a[this.sortBy] > b[this.sortBy] ? 1 : -1
-                        }
-                    })
-                    .map((data, index) => {
-                        data.index = index + 1
-                        return data
-                    })
-            },
-            totalPage() {
-                return Math.ceil(this.dataSorted.length / this.slice)
-            },
-            dataByPage() {
-                return this.dataSorted.slice((this.page - 1) * this.slice, this.page * this.slice)
-            },
-            paginateIndex() {
-                const index = []
-                if (this.totalPage < 7)
-                    for (let i = 1; i <= this.totalPage; i++) {
-                        index.push(i)
-                    }
-                else {
-                    if (this.page < 5) {
-                        for (let i = 1; i <= 5; i++) {
-                            index.push(i)
-                        }
-                        index.push("...")
-                        index.push(this.totalPage)
-                    } else if (this.page > this.totalPage - 4) {
-                        index.push(1)
-                        index.push("...")
-                        for (let i = this.totalPage - 4; i <= this.totalPage; i++) {
-                            index.push(i)
-                        }
-                    } else {
-                        index.push(1)
-                        index.push("...")
-                        for (let i = this.page - 1; i <= this.page + 1; i++) {
-                            index.push(i)
-                        }
-                        index.push("...")
-                        index.push(this.totalPage)
-                    }
+                .map((data, index) => {
+                    data.index = index + 1;
+                    return data;
+                });
+        },
+        totalPage() {
+            return Math.ceil(this.dataSorted.length / this.slice);
+        },
+        dataByPage() {
+            return this.dataSorted.slice((this.page - 1) * this.slice, this.page * this.slice);
+        },
+        paginateIndex() {
+            const index = [];
+            if (this.totalPage < 7)
+                for (let i = 1; i <= this.totalPage; i++) {
+                    index.push(i);
                 }
-                return index
-            },
-            selectedDataKaryawan() {
-                if (!this.isNew) return this.dataSorted.filter((item) => this.selectedKaryawan === item.id)[0]
-                else return {}
+            else {
+                if (this.page < 5) {
+                    for (let i = 1; i <= 5; i++) {
+                        index.push(i);
+                    }
+                    index.push("...");
+                    index.push(this.totalPage);
+                } else if (this.page > this.totalPage - 4) {
+                    index.push(1);
+                    index.push("...");
+                    for (let i = this.totalPage - 4; i <= this.totalPage; i++) {
+                        index.push(i);
+                    }
+                } else {
+                    index.push(1);
+                    index.push("...");
+                    for (let i = this.page - 1; i <= this.page + 1; i++) {
+                        index.push(i);
+                    }
+                    index.push("...");
+                    index.push(this.totalPage);
+                }
+            }
+            return index;
+        },
+        selectedDataKaryawan() {
+            if (!this.isNew) return this.dataSorted.filter((item) => this.selectedKaryawan === item.id)[0];
+            else return {};
+        },
+    },
+    watch: {
+        totalPage() {
+            if (this.page > this.totalPage) this.page = this.totalPage;
+        },
+        isMounted() {
+            this.data = this.karyawan;
+        },
+        karyawan: {
+            deep: true,
+            handler(val, oldVal) {
+                this.data = this.karyawan;
             },
         },
-        watch: {
-            totalPage() {
-                if (this.page > this.totalPage) this.page = this.totalPage
-            },
-            isMounted() {
-                this.data = this.karyawan
-            },
-            karyawan: {
-                deep: true,
-                handler(val, oldVal) {
-                    this.data = this.karyawan
-                },
-            },
-        },
-    }
+    },
+};
 </script>
 
 <template>
@@ -312,7 +313,7 @@
             Data Karyawan
         </div>
         <div class="mb-4 grid grid-cols-6 gap-x-6 gap-y-4 overflow-hidden">
-            <div class="lg:col-span 2 col-span-6 flex flex-wrap items-center sm:col-span-3">
+            <div class="col-span-6 flex flex-wrap items-center sm:col-span-4 lg:col-span-2">
                 <label for="modal-filter" class="btn btn-info mr-2">FIlter</label>
                 <label for="add-detail-datadiri" class="btn btn-primary mr-2" @click="isNew = true">Tambah</label>
                 <label for="modal-upload" class="btn btn-primary mr-2">Upload</label>
@@ -586,6 +587,7 @@
                         <label for="name" class="mb-2 block">Foto Upload : </label>
                         <input
                             type="file"
+                            @input="file.foto = $event.target.files[0]"
                             class="input-text h-11 border file:mr-4 file:h-full file:border-0 file:bg-blue-50 file:py-2 file:px-4 hover:file:bg-blue-100"
                         />
                     </div>
