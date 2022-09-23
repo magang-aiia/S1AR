@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Jabatan;
+use App\Models\Bagian;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,16 +16,15 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $max_jabatan = count(Jabatan::where('level_user_id', '<>', 8)->get());
-        $op_id = Jabatan::where('level_user_id', 1)->first()->id;
+        $max_bagian = count(Bagian::where('jabatan_id', '<>', 8)->get());
+        $op_id = Bagian::where('jabatan_id', 1)->first()->id;
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'npk' => $this->faker->unique()->numberBetween(100000, 999999),
-            'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'jabatan_id' => $this->number++ <= $max_jabatan ? $this->number : $this->faker->numberBetween($op_id, $max_jabatan),
+            'bagian_id' => $this->number++ <= $max_bagian ? $this->number : $this->faker->numberBetween($op_id, $max_bagian),
         ];
     }
 

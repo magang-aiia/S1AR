@@ -32,7 +32,7 @@ function getNav(parentActive = "", childActive = "") {
             iconType: "regular",
             child: [],
         },
-    ];
+    ]
 }
 
-export default getNav;
+export default getNav

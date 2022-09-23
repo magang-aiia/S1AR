@@ -57,7 +57,7 @@ function getNav(parentActive = "", childActive = "", isAtasan = false) {
                 iconType: "regular",
                 child: [],
             },
-        ];
+        ]
     else
         return [
             {
@@ -108,7 +108,7 @@ function getNav(parentActive = "", childActive = "", isAtasan = false) {
                 iconType: "regular",
                 child: [],
             },
-        ];
+        ]
 }
 
-export default getNav;
+export default getNav

@@ -1,28 +1,28 @@
 <script>
-import MainLayout from "@/Layouts/Main.vue";
-import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3";
-import getNav from "@/Pages/User/NavUser.js";
+    import MainLayout from "@/Layouts/Main.vue"
+    import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3"
+    import getNav from "@/Pages/User/NavUser.js"
 
-export default {
-    components: {
-        MainLayout,
-        HeadInertia,
-        LinkInertia,
-    },
-    props: {
-        isAtasan: Boolean,
-    },
-    data() {
-        return {
-            nav: [],
-            modalCutiTahunan: false,
-            modalCutiIstimewa: false,
-        };
-    },
-    mounted() {
-        this.nav = getNav("dashboard", undefined, this.isAtasan);
-    },
-};
+    export default {
+        components: {
+            MainLayout,
+            HeadInertia,
+            LinkInertia,
+        },
+        props: {
+            isAtasan: Boolean,
+        },
+        data() {
+            return {
+                nav: [],
+                modalCutiTahunan: false,
+                modalCutiIstimewa: false,
+            }
+        },
+        mounted() {
+            this.nav = getNav("dashboard", undefined, this.isAtasan)
+        },
+    }
 </script>
 
 <template>
@@ -42,7 +42,7 @@ export default {
                     for="saldo-cuti-tahunan"
                     class="group flex h-28 w-full cursor-pointer select-none flex-col overflow-hidden rounded-2xl bg-purple-500 text-center text-base-100 hover:shadow-lg dark:bg-purple-700 dark:text-base-content"
                 >
-                    <div class="flex flex-[1_0] flex-col justify-center text-5xl font-bold group-hover:animate-ping">
+                    <div class="group-hover:animate-ping flex flex-[1_0] flex-col justify-center text-5xl font-bold">
                         23
                     </div>
                     <div class="truncate rounded-b-2xl bg-purple-700 py-1 px-2 text-xl dark:bg-purple-900">
@@ -53,7 +53,7 @@ export default {
                     for="saldo-cuti-istimewa"
                     class="group flex h-28 w-full cursor-pointer select-none flex-col overflow-hidden rounded-2xl bg-pink-500 text-center text-base-100 hover:shadow-lg dark:bg-pink-700 dark:text-base-content"
                 >
-                    <div class="flex flex-[1_0] flex-col justify-center text-5xl font-bold group-hover:animate-ping">
+                    <div class="group-hover:animate-ping flex flex-[1_0] flex-col justify-center text-5xl font-bold">
                         25
                     </div>
                     <div class="truncate rounded-b-2xl bg-pink-700 py-1 px-2 text-xl dark:bg-pink-900">

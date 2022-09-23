@@ -9,28 +9,8 @@ class Jabatan extends Model
 {
     use HasFactory;
 
-    public function user()
+    public function bagian()
     {
-        return $this->hasMany(User::class);
-    }
-
-    public function level_user()
-    {
-        return $this->belongsTo(LevelUser::class);
-    }
-
-    public function bawahan()
-    {
-        return $this->hasMany(Jabatan::class, 'atasan_kode', 'kode')->with('user');
-    }
-
-    public function atasan()
-    {
-        return $this->belongsTo(Jabatan::class, 'atasan_kode', 'kode')->with('user');
-    }
-
-    public function atasan_atasan()
-    {
-        return $this->belongsTo(Jabatan::class, 'atasan_kode', 'kode')->with('user', 'atasan');
+        return $this->hasMany(Bagian::class);
     }
 }

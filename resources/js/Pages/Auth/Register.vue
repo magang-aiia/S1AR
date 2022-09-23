@@ -1,26 +1,26 @@
 <script setup>
-import BreezeButton from "@/Components/Button.vue";
-import BreezeGuestLayout from "@/Layouts/Guest.vue";
-import BreezeInput from "@/Components/Input.vue";
-import BreezeLabel from "@/Components/Label.vue";
-import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+    import BreezeButton from "@/Components/Button.vue"
+    import BreezeGuestLayout from "@/Layouts/Guest.vue"
+    import BreezeInput from "@/Components/Input.vue"
+    import BreezeLabel from "@/Components/Label.vue"
+    import BreezeValidationErrors from "@/Components/ValidationErrors.vue"
+    import { Head, Link, useForm } from "@inertiajs/inertia-vue3"
 
-const route = window.route;
+    const route = window.route
 
-const form = useForm({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-    terms: false,
-});
+    const form = useForm({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        terms: false,
+    })
 
-const submit = () => {
-    form.post(route("register"), {
-        onFinish: () => form.reset("password", "password_confirmation"),
-    });
-};
+    const submit = () => {
+        form.post(route("register"), {
+            onFinish: () => form.reset("password", "password_confirmation"),
+        })
+    }
 </script>
 
 <template>

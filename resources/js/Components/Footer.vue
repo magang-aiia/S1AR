@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
+    import { ref } from "vue"
 
-const year = ref(new Date().getFullYear());
+    const year = ref(new Date().getFullYear())
 </script>
 
 <template>

@@ -19,12 +19,7 @@ class UserDetail extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function departemen()
-    {
-        return $this->belongsTo(Departemen::class);
+        return $this->belongsTo(User::class)->with('bagian');
     }
 
     public function kontrak()

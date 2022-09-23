@@ -17,8 +17,6 @@ class CreateJabatansTable extends Migration
             $table->id();
             $table->string('kode')->unique();
             $table->string('nama');
-            $table->string('atasan_kode')->nullable();
-            $table->foreignId('level_user_id')->constrained('level_users');
             $table->timestamps();
         });
     }

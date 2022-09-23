@@ -20,7 +20,6 @@ class CreateUserDetailsTable extends Migration
             $table->string('tmp_lahir');
             $table->date('tgl_lahir');
             $table->date('tgl_bergabung');
-            $table->foreignId('departemen_id')->constrained('departemens')->onDelete('cascade');
             $table->foreignId('kontrak_id')->constrained('kontraks')->onDelete('cascade');
             $table->string('gol');
             $table->string('sta_kerja');

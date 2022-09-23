@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Exports\AbsensiExport;
 use App\Imports\AbsensiImport;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Redirect;
@@ -39,8 +40,21 @@ class AbsensiController extends Controller
     }
 
     public function user_index(Request $request) {
+        $user_id = auth()->user()->id;
+
+        if ($request->has('date')) {
+            $this->date = date('Y-m-d', strtotime($request->date));
+            $this->month = date('m', strtotime($request->date));
+            $this->year = date('Y', strtotime($request->date));
+        }
+        
         return Inertia::render('User/Absensi', [
             'isAtasan' => Gate::allows('isAtasan'),
+            'absensi' => Absensi::where('user_id', $user_id)->whereMonth('tanggal', '=', $this->month)->whereYear('tanggal', '=', $this->year)->with('user', 'shift')->get(),
+            'date' => $this->date,
+            'shift' => Shift::all()->pluck('nama')->toArray(),
+            'status' => Absensi::get()->unique('status')->pluck('status')->toArray(),
+            'range_tanggal' => Absensi::select(DB::raw('MIN(tanggal) as min, MAX(tanggal) as max'))->where('user_id', $user_id)->first(),
         ]);
     }
 

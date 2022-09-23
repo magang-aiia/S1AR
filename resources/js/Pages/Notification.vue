@@ -1,267 +1,267 @@
 <script>
-import MainLayout from "@/Layouts/Main.vue";
-import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3";
-import getNavUser from "@/Pages/User/NavUser.js";
-import getNavAdmin from "@/Pages/Admin/NavAdmin.js";
-import moment from "moment";
+    import MainLayout from "@/Layouts/Main.vue"
+    import { Head as HeadInertia, Link as LinkInertia } from "@inertiajs/inertia-vue3"
+    import getNavUser from "@/Pages/User/NavUser.js"
+    import getNavAdmin from "@/Pages/Admin/NavAdmin.js"
+    import moment from "moment"
 
-export default {
-    components: {
-        MainLayout,
-        HeadInertia,
-        LinkInertia,
-    },
-    props: {
-        isAtasan: Boolean,
-        isAdmin: Boolean,
-    },
-    data() {
-        return {
-            nav: [],
-            sortBy: "tanggal",
-            sortDesc: true,
-            search: "",
-            slice: 5,
-            page: 1,
-            isMounted: false,
-            data: [
-                {
-                    kode: "CUTI-2021-0001",
-                    tanggal: "2022-08-01",
-                    nama: "Budi Suherman",
-                    avatar: "avatar.jpg",
-                    npk: "00789",
-                    type: "Cuti",
-                    typeOther: "Cuti tahunan",
-                    status1: "Menunggu",
-                    status2: "Disetujui",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0002",
-                    tanggal: "2022-08-02",
-                    nama: "Andi Sulaeman",
-                    avatar: "avatar1.png",
-                    npk: "00788",
-                    type: "Cuti",
-                    typeOther: "Cuti Istimewa",
-                    status1: "Disetujui",
-                    status2: "Disetujui",
-                    status3: "Ditolak",
-                },
-                {
-                    kode: "CUTI-2021-0003",
-                    tanggal: "2022-08-03",
-                    nama: "Cahyo Widya Kusuma",
-                    avatar: "avatar2.png",
-                    npk: "00785",
-                    type: "Cuti",
-                    typeOther: "Cuti tahunan",
-                    status1: "Disetujui",
-                    status2: "Menunggu",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0004",
-                    tanggal: "2022-08-04",
-                    nama: "Erlaangga Setiabudi",
-                    avatar: "avatar5.png",
-                    npk: "00783",
-                    type: "Cuti",
-                    typeOther: "Cuti Istimewa",
-                    status1: "Ditolak",
-                    status2: "Disetujui",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0005",
-                    tanggal: "2022-08-05",
-                    nama: "Santoso Ali",
-                    avatar: "avatar6.png",
-                    npk: "00787",
-                    type: "Izin",
-                    typeOther: "Sakit",
-                    status1: "Disetujui",
-                    status2: "Menunggu",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0006",
-                    tanggal: "2022-08-06",
-                    nama: "Budi Suherman",
-                    avatar: "avatar3.jpg",
-                    npk: "00789",
-                    type: "Data diri",
-                    typeOther: "Data diri",
-                    status1: "Menunggu",
-                    status2: "Disetujui",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0007",
-                    tanggal: "2022-08-07",
-                    nama: "Angga Wijaya",
-                    avatar: "avatar2.png",
-                    npk: "00785",
-                    type: "Data diri",
-                    typeOther: "Data diri",
-                    status1: "Ditolak",
-                    status2: "Ditolak",
-                    status3: "Ditolak",
-                },
-                {
-                    kode: "CUTI-2021-0008",
-                    tanggal: "2022-08-08",
-                    nama: "Umam Ardi Pratama",
-                    avatar: "avatar3.jpg",
-                    npk: "00786",
-                    type: "Izin",
-                    typeOther: "Dinas Luar",
-                    status1: "Disetujui",
-                    status2: "Ditolak",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0009",
-                    tanggal: "2022-08-09",
-                    nama: "Budi Suherman",
-                    avatar: "avatar6.png",
-                    npk: "00789",
-                    type: "Izin",
-                    typeOther: "Sakit",
-                    status1: "Disetujui",
-                    status2: "Disetujui",
-                    status3: "Menunggu",
-                },
-                {
-                    kode: "CUTI-2021-0010",
-                    tanggal: "2022-08-10",
-                    nama: "Arya Saputra",
-                    avatar: "avatar1.png",
-                    npk: "00790",
-                    type: "Izin",
-                    typeOther: "Sakit",
-                    status1: "Ditolak",
-                    status2: "Disetujui",
-                    status3: "Disetujui",
-                },
-            ],
-        };
-    },
-    setup() {
-        moment.locale("id");
-    },
-    mounted() {
-        this.isMounted = true;
-        if (this.isAdmin) {
-            this.nav = getNavAdmin();
-        } else {
-            this.nav = getNavUser(undefined, undefined, this.isAtasan);
-        }
-    },
-    unmounted() {
-        this.isMounted = false;
-    },
-    methods: {
-        sorted(by) {
-            if (this.sortBy === by) {
-                this.sortDesc = !this.sortDesc;
+    export default {
+        components: {
+            MainLayout,
+            HeadInertia,
+            LinkInertia,
+        },
+        props: {
+            isAtasan: Boolean,
+            isAdmin: Boolean,
+        },
+        data() {
+            return {
+                nav: [],
+                sortBy: "tanggal",
+                sortDesc: true,
+                search: "",
+                slice: 5,
+                page: 1,
+                isMounted: false,
+                data: [
+                    {
+                        kode: "CUTI-2021-0001",
+                        tanggal: "2022-08-01",
+                        nama: "Budi Suherman",
+                        avatar: "avatar.jpg",
+                        npk: "00789",
+                        type: "Cuti",
+                        typeOther: "Cuti tahunan",
+                        status1: "Menunggu",
+                        status2: "Disetujui",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0002",
+                        tanggal: "2022-08-02",
+                        nama: "Andi Sulaeman",
+                        avatar: "avatar1.png",
+                        npk: "00788",
+                        type: "Cuti",
+                        typeOther: "Cuti Istimewa",
+                        status1: "Disetujui",
+                        status2: "Disetujui",
+                        status3: "Ditolak",
+                    },
+                    {
+                        kode: "CUTI-2021-0003",
+                        tanggal: "2022-08-03",
+                        nama: "Cahyo Widya Kusuma",
+                        avatar: "avatar2.png",
+                        npk: "00785",
+                        type: "Cuti",
+                        typeOther: "Cuti tahunan",
+                        status1: "Disetujui",
+                        status2: "Menunggu",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0004",
+                        tanggal: "2022-08-04",
+                        nama: "Erlaangga Setiabudi",
+                        avatar: "avatar5.png",
+                        npk: "00783",
+                        type: "Cuti",
+                        typeOther: "Cuti Istimewa",
+                        status1: "Ditolak",
+                        status2: "Disetujui",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0005",
+                        tanggal: "2022-08-05",
+                        nama: "Santoso Ali",
+                        avatar: "avatar6.png",
+                        npk: "00787",
+                        type: "Izin",
+                        typeOther: "Sakit",
+                        status1: "Disetujui",
+                        status2: "Menunggu",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0006",
+                        tanggal: "2022-08-06",
+                        nama: "Budi Suherman",
+                        avatar: "avatar3.jpg",
+                        npk: "00789",
+                        type: "Data diri",
+                        typeOther: "Data diri",
+                        status1: "Menunggu",
+                        status2: "Disetujui",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0007",
+                        tanggal: "2022-08-07",
+                        nama: "Angga Wijaya",
+                        avatar: "avatar2.png",
+                        npk: "00785",
+                        type: "Data diri",
+                        typeOther: "Data diri",
+                        status1: "Ditolak",
+                        status2: "Ditolak",
+                        status3: "Ditolak",
+                    },
+                    {
+                        kode: "CUTI-2021-0008",
+                        tanggal: "2022-08-08",
+                        nama: "Umam Ardi Pratama",
+                        avatar: "avatar3.jpg",
+                        npk: "00786",
+                        type: "Izin",
+                        typeOther: "Dinas Luar",
+                        status1: "Disetujui",
+                        status2: "Ditolak",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0009",
+                        tanggal: "2022-08-09",
+                        nama: "Budi Suherman",
+                        avatar: "avatar6.png",
+                        npk: "00789",
+                        type: "Izin",
+                        typeOther: "Sakit",
+                        status1: "Disetujui",
+                        status2: "Disetujui",
+                        status3: "Menunggu",
+                    },
+                    {
+                        kode: "CUTI-2021-0010",
+                        tanggal: "2022-08-10",
+                        nama: "Arya Saputra",
+                        avatar: "avatar1.png",
+                        npk: "00790",
+                        type: "Izin",
+                        typeOther: "Sakit",
+                        status1: "Ditolak",
+                        status2: "Disetujui",
+                        status3: "Disetujui",
+                    },
+                ],
+            }
+        },
+        setup() {
+            moment.locale("id")
+        },
+        mounted() {
+            this.isMounted = true
+            if (this.isAdmin) {
+                this.nav = getNavAdmin()
             } else {
-                this.sortBy = by;
+                this.nav = getNavUser(undefined, undefined, this.isAtasan)
             }
         },
-        log(data) {
-            console.log(data);
+        unmounted() {
+            this.isMounted = false
         },
-        message(status, type) {
-            if (status === "Menunggu") {
-                return "Menunggu permohonan " + type.toLowerCase() + " anda.";
-            } else if (status === "Disetujui") {
-                return "Menyetujui permohonan " + type.toLowerCase() + " anda.";
-            } else if (status === "Ditolak") {
-                return "Menolak permohonan " + type.toLowerCase() + " anda.";
-            }
-        },
-    },
-    computed: {
-        transformData() {
-            return this.data.map((data) => {
-                data.tanggalSemantic = moment(data.tanggal).fromNow();
-                data.message = this.message(data.status1, data.type);
-                return data;
-            });
-        },
-        searchData() {
-            return this.transformData.filter((data) => {
-                if (this.isMounted)
-                    return Object.keys(data).some((key) => {
-                        return String(data[key]).toLowerCase().includes(this.search.toLowerCase());
-                    });
-                else return data;
-            });
-        },
-        dataSorted() {
-            const data = this.searchData.slice();
-            return data
-                .sort((a, b) => {
-                    if (this.sortDesc) {
-                        return a[this.sortBy] < b[this.sortBy] ? 1 : -1;
-                    } else {
-                        return a[this.sortBy] > b[this.sortBy] ? 1 : -1;
-                    }
-                })
-                .map((data, index) => {
-                    data.index = index + 1;
-                    return data;
-                });
-        },
-        totalPage() {
-            return Math.ceil(this.dataSorted.length / this.slice);
-        },
-        dataByPage() {
-            return this.dataSorted.slice((this.page - 1) * this.slice, this.page * this.slice);
-        },
-        paginateIndex() {
-            const index = [];
-            if (this.totalPage < 7)
-                for (let i = 1; i <= this.totalPage; i++) {
-                    index.push(i);
-                }
-            else {
-                if (this.page < 5) {
-                    for (let i = 1; i <= 5; i++) {
-                        index.push(i);
-                    }
-                    index.push("...");
-                    index.push(this.totalPage);
-                } else if (this.page > this.totalPage - 4) {
-                    index.push(1);
-                    index.push("...");
-                    for (let i = this.totalPage - 4; i <= this.totalPage; i++) {
-                        index.push(i);
-                    }
+        methods: {
+            sorted(by) {
+                if (this.sortBy === by) {
+                    this.sortDesc = !this.sortDesc
                 } else {
-                    index.push(1);
-                    index.push("...");
-                    for (let i = this.page - 1; i <= this.page + 1; i++) {
-                        index.push(i);
-                    }
-                    index.push("...");
-                    index.push(this.totalPage);
+                    this.sortBy = by
                 }
-            }
-            return index;
+            },
+            log(data) {
+                console.log(data)
+            },
+            message(status, type) {
+                if (status === "Menunggu") {
+                    return "Menunggu permohonan " + type.toLowerCase() + " anda."
+                } else if (status === "Disetujui") {
+                    return "Menyetujui permohonan " + type.toLowerCase() + " anda."
+                } else if (status === "Ditolak") {
+                    return "Menolak permohonan " + type.toLowerCase() + " anda."
+                }
+            },
         },
-    },
-    watch: {
-        search() {
-            this.page = 1;
+        computed: {
+            transformData() {
+                return this.data.map((data) => {
+                    data.tanggalSemantic = moment(data.tanggal).fromNow()
+                    data.message = this.message(data.status1, data.type)
+                    return data
+                })
+            },
+            searchData() {
+                return this.transformData.filter((data) => {
+                    if (this.isMounted)
+                        return Object.keys(data).some((key) => {
+                            return String(data[key]).toLowerCase().includes(this.search.toLowerCase())
+                        })
+                    else return data
+                })
+            },
+            dataSorted() {
+                const data = this.searchData.slice()
+                return data
+                    .sort((a, b) => {
+                        if (this.sortDesc) {
+                            return a[this.sortBy] < b[this.sortBy] ? 1 : -1
+                        } else {
+                            return a[this.sortBy] > b[this.sortBy] ? 1 : -1
+                        }
+                    })
+                    .map((data, index) => {
+                        data.index = index + 1
+                        return data
+                    })
+            },
+            totalPage() {
+                return Math.ceil(this.dataSorted.length / this.slice)
+            },
+            dataByPage() {
+                return this.dataSorted.slice((this.page - 1) * this.slice, this.page * this.slice)
+            },
+            paginateIndex() {
+                const index = []
+                if (this.totalPage < 7)
+                    for (let i = 1; i <= this.totalPage; i++) {
+                        index.push(i)
+                    }
+                else {
+                    if (this.page < 5) {
+                        for (let i = 1; i <= 5; i++) {
+                            index.push(i)
+                        }
+                        index.push("...")
+                        index.push(this.totalPage)
+                    } else if (this.page > this.totalPage - 4) {
+                        index.push(1)
+                        index.push("...")
+                        for (let i = this.totalPage - 4; i <= this.totalPage; i++) {
+                            index.push(i)
+                        }
+                    } else {
+                        index.push(1)
+                        index.push("...")
+                        for (let i = this.page - 1; i <= this.page + 1; i++) {
+                            index.push(i)
+                        }
+                        index.push("...")
+                        index.push(this.totalPage)
+                    }
+                }
+                return index
+            },
         },
-        slice() {
-            if (this.page > this.totalPage) this.page = this.totalPage;
+        watch: {
+            search() {
+                this.page = 1
+            },
+            slice() {
+                if (this.page > this.totalPage) this.page = this.totalPage
+            },
         },
-    },
-};
+    }
 </script>
 
 <template>

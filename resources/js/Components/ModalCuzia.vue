@@ -1,115 +1,115 @@
 <script>
-import moment from "moment";
+    import moment from "moment"
 
-const route = window.route;
+    const route = window.route
 
-export default {
-    name: "ModalCuzia",
-    inheritAttrs: false,
-    props: {
-        modalDetailCutiData: {
-            type: Object,
-            default: () => ({}),
-        },
-        modalDetailIzinData: {
-            type: Object,
-            default: () => ({}),
-        },
-        modalDetailDatadiriData: {
-            type: Object,
-            default: () => ({}),
-        },
-        modalEditDetailDatadiriData: {
-            type: Object,
-            default: () => ({}),
-        },
-        departemen: Object,
-        kontrak: Object,
-        isApprovable: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    data() {
-        return {
-            modalDetailCuti: false,
-            modalDetailIzin: false,
-            modalDetailDatadiri: false,
-            modalConfirm: false,
-            modalAddDetailDatadiri: false,
-            modalEditDetailDatadiri: false,
-            editKaryawan: {},
-            errors: {},
-            avatar: null,
-            avatarUrl: null,
-        };
-    },
-    methods: {
-        reset() {
-            setTimeout(() => {
-                this.modalDetailCuti = false;
-                this.modalDetailIzin = false;
-                this.modalDetailDatadiri = false;
-            }, 300);
-        },
-        habisKontrak(tglGabung, lamaBulan) {
-            return moment(tglGabung).add(lamaBulan, "months").format("YYYY-MM-DD");
-        },
-        log(data) {
-            console.log(data);
-        },
-        changeAvatar(event) {
-            this.avatar = event.target.files[0];
-            this.editKaryawan.avatar = this.avatar;
-            this.avatarUrl = URL.createObjectURL(event.target.files[0]);
-        },
-        lamaKontrak(kontrakId) {
-            return this.kontrak.find((item) => item.id === kontrakId).lama_kontrak;
-        },
-        tambahKaryawan() {
-            this.$inertia.post(route("admin.karyawan.store"), this.editKaryawan, {
-                preserveScroll: true,
-                preserveState: true,
-                forceFormData: true,
-                onError: (page) => {
-                    this.errors = page;
-                },
-                onSuccess: () => {
-                    this.errors = {};
-                    this.editKaryawan = {};
-                    this.modalAddDetailDatadiri = false;
-                    this.avatar = null;
-                    this.avatarUrl = null;
-                },
-            });
-        },
-        updateKaryawan() {
-            this.$inertia.post(route("admin.karyawan.update", this.editKaryawan.id), this.editKaryawan, {
-                preserveScroll: true,
-                preserveState: true,
-                forceFormData: true,
-                onError: (page) => {
-                    this.errors = page;
-                },
-                onSuccess: () => {
-                    this.errors = {};
-                    this.editKaryawan = {};
-                    this.modalEditDetailDatadiri = false;
-                    this.avatar = null;
-                    this.avatarUrl = null;
-                },
-            });
-        },
-    },
-    watch: {
-        modalEditDetailDatadiriData: {
-            handler() {
-                this.editKaryawan = this.modalEditDetailDatadiriData;
+    export default {
+        name: "ModalCuzia",
+        inheritAttrs: false,
+        props: {
+            modalDetailCutiData: {
+                type: Object,
+                default: () => ({}),
             },
-            deep: true,
+            modalDetailIzinData: {
+                type: Object,
+                default: () => ({}),
+            },
+            modalDetailDatadiriData: {
+                type: Object,
+                default: () => ({}),
+            },
+            modalEditDetailDatadiriData: {
+                type: Object,
+                default: () => ({}),
+            },
+            departemen: Object,
+            kontrak: Object,
+            isApprovable: {
+                type: Boolean,
+                default: false,
+            },
         },
-    },
-};
+        data() {
+            return {
+                modalDetailCuti: false,
+                modalDetailIzin: false,
+                modalDetailDatadiri: false,
+                modalConfirm: false,
+                modalAddDetailDatadiri: false,
+                modalEditDetailDatadiri: false,
+                editKaryawan: {},
+                errors: {},
+                avatar: null,
+                avatarUrl: null,
+            }
+        },
+        methods: {
+            reset() {
+                setTimeout(() => {
+                    this.modalDetailCuti = false
+                    this.modalDetailIzin = false
+                    this.modalDetailDatadiri = false
+                }, 300)
+            },
+            habisKontrak(tglGabung, lamaBulan) {
+                return moment(tglGabung).add(lamaBulan, "months").format("YYYY-MM-DD")
+            },
+            log(data) {
+                console.log(data)
+            },
+            changeAvatar(event) {
+                this.avatar = event.target.files[0]
+                this.editKaryawan.avatar = this.avatar
+                this.avatarUrl = URL.createObjectURL(event.target.files[0])
+            },
+            lamaKontrak(kontrakId) {
+                return this.kontrak.find((item) => item.id === kontrakId).lama_kontrak
+            },
+            tambahKaryawan() {
+                this.$inertia.post(route("admin.karyawan.store"), this.editKaryawan, {
+                    preserveScroll: true,
+                    preserveState: true,
+                    forceFormData: true,
+                    onError: (page) => {
+                        this.errors = page
+                    },
+                    onSuccess: () => {
+                        this.errors = {}
+                        this.editKaryawan = {}
+                        this.modalAddDetailDatadiri = false
+                        this.avatar = null
+                        this.avatarUrl = null
+                    },
+                })
+            },
+            updateKaryawan() {
+                this.$inertia.post(route("admin.karyawan.update", this.editKaryawan.id), this.editKaryawan, {
+                    preserveScroll: true,
+                    preserveState: true,
+                    forceFormData: true,
+                    onError: (page) => {
+                        this.errors = page
+                    },
+                    onSuccess: () => {
+                        this.errors = {}
+                        this.editKaryawan = {}
+                        this.modalEditDetailDatadiri = false
+                        this.avatar = null
+                        this.avatarUrl = null
+                    },
+                })
+            },
+        },
+        watch: {
+            modalEditDetailDatadiriData: {
+                handler() {
+                    this.editKaryawan = this.modalEditDetailDatadiriData
+                },
+                deep: true,
+            },
+        },
+    }
 </script>
 
 <template>

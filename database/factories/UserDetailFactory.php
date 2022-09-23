@@ -2,10 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Departemen;
-use App\Models\Jabatan;
 use App\Models\Kontrak;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserDetailFactory extends Factory
@@ -20,14 +17,12 @@ class UserDetailFactory extends Factory
     public function definition()
     {
         $kontrak = Kontrak::pluck('id')->toArray();
-        $departemen = Departemen::pluck('id')->toArray();
         return [
             'user_id' => $this->number++,
             'no_hp' => $this->faker->phoneNumber(),
             'tmp_lahir'=> $this->faker->city(),
             'tgl_lahir' => $this->faker->date(),
             'tgl_bergabung' => $this->faker->dateTimeBetween('-8 years', 'now'),
-            'departemen_id' => $this->faker->randomElement($departemen),
             'kontrak_id' => $this->faker->randomElement($kontrak),
             'gol' => $this->faker->randomElement([1,2]),
             'sta_kerja' => 'status',

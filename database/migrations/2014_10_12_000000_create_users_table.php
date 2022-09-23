@@ -18,10 +18,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('npk')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->default('avatar.jpg');
-            $table->foreignId('jabatan_id')->constrained('jabatans')->onDelete('cascade');
+            $table->foreignId('bagian_id')->constrained('bagians')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

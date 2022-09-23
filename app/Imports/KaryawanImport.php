@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\User;
+use App\Models\Bagian;
 use App\Models\Jabatan;
 use App\Models\Kontrak;
 use App\Models\UserDetail;
@@ -39,15 +40,15 @@ class KaryawanImport implements ToCollection, WithHeadingRow, WithCalculatedForm
             if (!isset($item['kontrak'])) dd($index, $item, $items);
             $kontrak = Kontrak::where('nama_kontrak', trim($item['kontrak']))->first();
             
-            $jabatan = Jabatan::where('kode', $item['departemen'])->first();
-            if (!$jabatan) dd($item);
+            $bagian = Bagian::where('kode', $item['departemen'])->first();
+            if (!$bagian) dd($item);
             
             $user = User::create([
                 'name' => $item['nama'],
                 'email' => $item['email'],
                 'npk' => $item['npk'],
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-                'jabatan_id' => $jabatan->id,
+                'bagian_id' => $bagian->id,
             ]);
 
             if(is_numeric($item['tanggal_bergabung'])) {
@@ -65,7 +66,6 @@ class KaryawanImport implements ToCollection, WithHeadingRow, WithCalculatedForm
             UserDetail::create([
                 'user_id' => $user->id,
                 'kontrak_id' => $kontrak->id,
-                'departemen_id' => '1',
                 'tgl_bergabung' => $tanggal_bergabung ?? '2000-01-01',
                 'no_hp' => $item['no_hp'] ?? '-',
                 'tmp_lahir' => $item['tempat_lahir'] ?? '-',

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\MadingController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\CuziaController;
 use App\Http\Controllers\KaryawanController;
 
 /*
@@ -30,11 +31,7 @@ Route::middleware(['auth', 'verified', 'can:isUser'])->group(function () {
         ]);
     })->name('dashboard');
 
-    Route::get('/datadiri', function () {
-        return Inertia::render('User/Datadiri', [
-            'isAtasan' => Gate::allows('isAtasan'),
-        ]);
-    })->name('datadiri');
+    Route::get('/datadiri', [CuziaController::class, 'datadiri_user'])->name('datadiri');
 
     Route::get('/cuti', function () {
         return Inertia::render('User/Cuti', [

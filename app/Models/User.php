@@ -22,7 +22,7 @@ class User extends Authenticatable
         'npk',
         'email',
         'password',
-        'jabatan_id',
+        'bagian_id',
     ];
 
     /**
@@ -35,28 +35,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function mading()
-    {
-        return $this->hasMany(Mading::class);
-    }
-
     public function user_detail()
     {
-        return $this->hasOne(UserDetail::class)->with('departemen', 'kontrak', 'jabatan');
+        return $this->hasOne(UserDetail::class)->with('kontrak');
     }
 
-    public function jabatan()
+    public function bagian()
     {
-        return $this->belongsTo(Jabatan::class)->with('level_user', 'atasan_atasan');
+        return $this->belongsTo(Bagian::class)->with('jabatan', 'atasan_atasan');
     }
 
     public function absensi()

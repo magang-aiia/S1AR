@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Exports\KaryawanExport;
 use App\Imports\KaryawanImport;
 use App\Http\Controllers\Controller;
+use App\Models\Jabatan;
+use App\Models\LevelUser;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,8 +25,8 @@ class KaryawanController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Karyawan', [
-            'karyawan' => UserDetail::with(['user', 'departemen', 'kontrak'])->get(),
-            'departemen' => Departemen::all(),
+            'karyawan' => UserDetail::with(['user', 'kontrak'])->get(),
+            'jabatan' => Jabatan::with('bagian')->get(),
             'kontrak' => Kontrak::all(),
         ]);
     }
@@ -36,13 +38,13 @@ class KaryawanController extends Controller
             'nama' => 'required',
             'email' => 'required|unique:users',
             'npk' => 'required|unique:users',
-            'departemen_id' => 'required',
+            'jabatan_id' => 'required',
+            'bagian_id' => 'required',
             'kontrak_id' => 'required',
             'tgl_bergabung' => 'required',
             'no_hp' => 'required',
             'tmp_lahir' => 'required',
             'tgl_lahir' => 'required',
-            'jabatan' => 'required',
             'gol' => 'required',
             'sta_kerja' => 'required',
             'sta_nikah' => 'required',
@@ -66,6 +68,7 @@ class KaryawanController extends Controller
             'email' => $request->email,
             'password' => Hash::make('password'),
             'npk' => $request->npk,
+            'bagian_id' => $request->bagian_id,
         ]);
 
         if ($request->hasFile('avatar')) {
@@ -79,13 +82,11 @@ class KaryawanController extends Controller
 
         UserDetail::create([
             'user_id' => $user->id,
-            'departemen_id' => $request->departemen_id,
             'kontrak_id' => $request->kontrak_id,
             'tgl_bergabung' => $request->tgl_bergabung,
             'no_hp' => $request->no_hp,
             'tmp_lahir' => $request->tmp_lahir,
             'tgl_lahir' => $request->tgl_lahir,
-            'jabatan' => $request->jabatan,
             'gol' => $request->gol,
             'sta_kerja' => $request->sta_kerja,
             'sta_nikah' => $request->sta_nikah,
@@ -117,13 +118,13 @@ class KaryawanController extends Controller
             'nama' => 'required',
             'email' => 'required|unique:users,email,' . $user_detail->user_id,
             'npk' => 'required|unique:users,npk,' . $user_detail->user_id,
-            'departemen_id' => 'required',
+            'jabatan_id' => 'required',
+            'bagian_id' => 'required',
             'kontrak_id' => 'required',
             'tgl_bergabung' => 'required',
             'no_hp' => 'required',
             'tmp_lahir' => 'required',
             'tgl_lahir' => 'required',
-            'jabatan' => 'required',
             'gol' => 'required',
             'sta_kerja' => 'required',
             'sta_nikah' => 'required',
@@ -157,14 +158,13 @@ class KaryawanController extends Controller
         $user_detail->user->name = $request->nama;
         $user_detail->user->email = $request->email;
         $user_detail->user->npk = $request->npk;
+        $user_detail->user->bagian_id = $request->bagian_id;
 
-        $user_detail->departemen_id = $request->departemen_id;
         $user_detail->kontrak_id = $request->kontrak_id;
         $user_detail->tgl_bergabung = $request->tgl_bergabung;
         $user_detail->no_hp = $request->no_hp;
         $user_detail->tmp_lahir = $request->tmp_lahir;
         $user_detail->tgl_lahir = $request->tgl_lahir;
-        $user_detail->jabatan = $request->jabatan;
         $user_detail->gol = $request->gol;
         $user_detail->sta_kerja = $request->sta_kerja;
         $user_detail->sta_nikah = $request->sta_nikah;
