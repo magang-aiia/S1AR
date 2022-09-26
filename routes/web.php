@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified', 'can:isUser'])->group(function () {
     })->name('dashboard');
 
     Route::get('/datadiri', [CuziaController::class, 'datadiri_user'])->name('datadiri');
+    Route::post('/datadiri', [CuziaController::class, 'ajukan_datadiri'])->name('ajukan.datadiri');
 
     Route::get('/cuti', function () {
         return Inertia::render('User/Cuti', [

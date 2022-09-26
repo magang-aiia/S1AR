@@ -112,6 +112,22 @@
                 // this.isDroped = false;
                 console.log("leave")
             },
+            ajukan() {
+                this.editKaryawan.files = this.files
+                this.$inertia.post(route("ajukan.datadiri"), this.editKaryawan, {
+                    preserveScroll: true,
+                    preserveState: true,
+                    forceFormData: true,
+                    onError: (page) => {
+                        this.errors = page
+                    },
+                    onSuccess: () => {
+                        this.errors = {}
+                        this.avatar = null
+                        this.avatarUrl = null
+                    },
+                })
+            },
         },
         computed: {
             uploadedFiles() {
@@ -421,7 +437,7 @@
                 </div>
             </div>
             <div class="col-span-6 flex items-end justify-between sm:col-span-3 lg:col-span-2 lg:col-start-3">
-                <button class="btn btn-primary w-full" @click="updateKaryawan()">Ajukan Data</button>
+                <button class="btn btn-primary w-full" @click="ajukan()">Ajukan Data</button>
             </div>
         </div>
     </MainLayout>

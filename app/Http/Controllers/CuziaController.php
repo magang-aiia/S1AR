@@ -22,4 +22,9 @@ class CuziaController extends Controller
             'jabatan' => Jabatan::with('bagian')->get(),
         ]);
     }
+
+    public function ajukan_datadiri(Request $request)
+    {
+        dd($request->all());
+    }
 }
