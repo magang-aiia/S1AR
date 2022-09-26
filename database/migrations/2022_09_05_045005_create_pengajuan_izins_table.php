@@ -13,7 +13,7 @@ class CreatePengajuanIzinsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pengajuan__izins', function (Blueprint $table) {
+        Schema::create('pengajuan_izins', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreatePengajuanIzinsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pengajuan__izins');
+        Schema::dropIfExists('pengajuan_izins');
     }
 }
