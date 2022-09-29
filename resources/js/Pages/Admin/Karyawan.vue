@@ -25,10 +25,15 @@
             return {
                 nav: getNav("karyawan"),
                 isMounted: false,
+                modalConfirmNonaktif: false,
                 data: [],
                 karyawanCheklist: [],
                 isAllChecked: false,
                 selectedDataKaryawan: {},
+                selectedNonaktifData: {
+                    nama: null,
+                    id: null,
+                },
                 file: {
                     excel: null,
                     foto: null,
@@ -122,6 +127,9 @@
                         onStart: () => {
                             this.isLoading = true
                             this.loadingBy = id
+                        },
+                        onSuccess: () => {
+                            this.modalConfirmNonaktif = false
                         },
                         onFinish: () => {
                             this.isLoading = false
@@ -478,13 +486,16 @@
                         <td>{{ item.email }}</td>
                         <td>{{ item.no_hp }}</td>
                         <td>
-                            <button
-                                @click="updateStatus(item.user_id)"
+                            <label
+                                :for="item.status == 'aktif' ? 'konfirmasi-nonaktif' : ''"
+                                @click="
+                                    ;(selectedNonaktifData.nama = item.nama), (selectedNonaktifData.id = item.user_id)
+                                "
                                 :class="{ 'btn-info': item.status == 'aktif', 'btn-error': item.status == 'nonaktif' }"
                                 class="btn btn-sm w-32"
                             >
                                 {{ item.status }}
-                            </button>
+                            </label>
                         </td>
                         <td>
                             <label
@@ -619,6 +630,26 @@
                     </div>
                 </div>
             </label>
+        </Transition>
+    </label>
+
+    <input type="checkbox" id="konfirmasi-nonaktif" class="modal-toggle" v-model="modalConfirmNonaktif" />
+    <label
+        for="konfirmasi-nonaktif"
+        class="modal modal-bottom cursor-pointer transition-all ease-in-out sm:modal-middle"
+    >
+        <Transition name="bounce">
+            <div class="modal-box" v-if="modalConfirmNonaktif">
+                <div class="text-center text-2xl font-bold text-error">Konfirmasi Nonaktif!</div>
+                <div class="my-4 text-lg">
+                    apakah anda akan yakin menonaktifkan saudara
+                    <span class="font-bold">{{ selectedNonaktifData.nama }}</span> ?
+                </div>
+                <div class="grid grid-cols-2 place-content-center gap-x-4">
+                    <label for="konfirmasi-nonaktif" class="btn btn-md">Kembali</label>
+                    <label @click="updateStatus(selectedNonaktifData.id)" class="btn btn-error btn-md">nonaktif</label>
+                </div>
+            </div>
         </Transition>
     </label>
 </template>

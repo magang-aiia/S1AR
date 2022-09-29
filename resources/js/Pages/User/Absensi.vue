@@ -86,14 +86,14 @@
                 const list = []
                 if (this.rangeMonth !== null) {
                     const range = {
-                        start: moment(this.rangeMonth.min),
-                        end: moment(this.rangeMonth.max),
+                        start: moment(this.rangeMonth.min).startOf("month"),
+                        end: moment(this.rangeMonth.max).startOf("month"),
                     }
                     list.push({
                         value: range.start.format("YYYY-MM"),
                         text: range.start.format("MMMM YYYY"),
                     })
-                    while (range.start <= range.end) {
+                    while (range.start < range.end) {
                         const x = range.start.add(1, "month")
                         list.push({
                             value: x.format("YYYY-MM"),

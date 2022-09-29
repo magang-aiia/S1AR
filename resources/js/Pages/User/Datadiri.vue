@@ -175,6 +175,9 @@
                     <img class="z-[1]" :src="avatarUrl" v-if="avatar" />
                     <img class="z-[1]" :src="'/assets/image/' + editKaryawan.avatar" v-else />
                 </div>
+                <div class="absolute -bottom-6 left-0 mt-2 w-96 text-sm text-error" v-if="errors.avatar">
+                    {{ errors.avatar }}
+                </div>
                 <label
                     class="btn btn-primary absolute -bottom-1 -right-1 z-[2] h-12 w-12 rounded-full border-4 border-base-100 p-0 hover:border-base-100"
                 >
@@ -337,7 +340,7 @@
             </div>
             <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                 <label for="jml_anak" class="mb-2 block">Jumlah Anak</label>
-                <input type="text" v-model="editKaryawan.jml_anak" id="jml_anak" class="input-text" />
+                <input type="number" v-model="editKaryawan.jml_anak" id="jml_anak" class="input-text" />
                 <div class="mt-2 text-sm text-error" v-if="errors.jml_anak">{{ errors.jml_anak }}</div>
             </div>
             <div class="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -379,7 +382,7 @@
                     </div>
                 </label>
                 <div class="flex h-36 w-full flex-col">
-                    <div class="text-bold mb-2 w-full">File akan diupload :</div>
+                    <div class="text-bold mb-2 w-full">File data pendukung :</div>
                     <div class="flex-1 overflow-hidden">
                         <div class="flex w-max" v-if="uploadedFiles.length > 0" v-drag:x>
                             <template v-for="(i, index) in uploadedFiles" :key="index">

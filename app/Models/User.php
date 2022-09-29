@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Absensi::class)->with('shift');
     }
+
+    public function pengajuan_datadiri()
+    {
+        return $this->hasMany(PengajuanDatadiri::class)->with('approval1', 'approval2', 'file', 'kontrak');
+    }
 }

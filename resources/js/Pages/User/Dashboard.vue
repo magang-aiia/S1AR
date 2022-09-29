@@ -124,6 +124,16 @@
                 </LinkInertia>
             </div>
         </div>
+
+        lala
+
+        <file-viewer
+            id="file-viewer2"
+            filename="Sample-Sales-Data.xlsx"
+            url="https://go.microsoft.com/fwlink/?LinkID=521962"
+        ></file-viewer>
+
+        lala
     </MainLayout>
 
     <input type="checkbox" id="saldo-cuti-tahunan" class="modal-toggle" v-model="modalCutiTahunan" />

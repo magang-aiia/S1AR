@@ -15,13 +15,18 @@
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="{{ mix('js/manifest.js') }}" defer></script>
+        <script src="{{ mix('js/vendor.js') }}" defer></script>
+        <script src="{{ mix('js/vendor~utils-1.js') }}" defer></script>
+        <script src="{{ mix('js/vendor~utils-2.js') }}" defer></script>
+        <script src="{{ mix('js/vendor~utils-3.js') }}" defer></script>
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
         @inertia
 
         @env ('local')
-            <script src="http://localhost:8080/js/bundle.js"></script>
+            {{-- <script src="http://localhost:8080/js/bundle.js"></script> --}}
         @endenv
     </body>
 </html>

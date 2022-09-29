@@ -36,12 +36,9 @@ class KaryawanImport implements ToCollection, WithHeadingRow, WithCalculatedForm
         
         foreach ($items as $item) 
         {
-            // dd($items);
-            if (!isset($item['kontrak'])) dd($index, $item, $items);
             $kontrak = Kontrak::where('nama_kontrak', trim($item['kontrak']))->first();
             
-            $bagian = Bagian::where('kode', $item['departemen'])->first();
-            if (!$bagian) dd($item);
+            $bagian = Bagian::where('kode', $item['kode_departemen'])->first();
             
             $user = User::create([
                 'name' => $item['nama'],

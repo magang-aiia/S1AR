@@ -1,17 +1,31 @@
 <script>
     import MainLayout from "@/Layouts/Main.vue"
+    import ModalCuzia from "@/Components/ModalCuzia.vue"
     import { Head as HeadInertia } from "@inertiajs/inertia-vue3"
     import getNav from "@/Pages/Admin/NavAdmin.js"
     import moment from "moment"
+
+    const route = window.route
 
     export default {
         components: {
             MainLayout,
             HeadInertia,
+            ModalCuzia,
+        },
+        props: {
+            pengajuanDatadiri: Object,
+            date: String,
+            range_tanggal: Object,
+            kontrak: Object,
+            jabatan: Object,
         },
         data() {
             return {
                 nav: getNav("cuzia"),
+                selectedDate: null,
+                selectedData: {},
+                rangeMonth: null,
                 sortBy: "tanggal",
                 sortDesc: true,
                 search: "",
@@ -20,121 +34,11 @@
                 slice: 5,
                 page: 1,
                 isMounted: false,
-                data: [
-                    {
-                        kode: "CUTI-2021-0001",
-                        tanggal: "2021-01-01",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0002",
-                        tanggal: "2021-01-02",
-                        nama: "Andi Sulaeman",
-                        npk: "00788",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0003",
-                        tanggal: "2021-01-03",
-                        nama: "Cahyo Widya Kusuma",
-                        npk: "00785",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0004",
-                        tanggal: "2021-01-04",
-                        nama: "Erlaangga Setiabudi",
-                        npk: "00783",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0005",
-                        tanggal: "2021-01-05",
-                        nama: "Santoso Ali",
-                        npk: "00787",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0006",
-                        tanggal: "2021-01-06",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0007",
-                        tanggal: "2021-01-07",
-                        nama: "Angga Wijaya",
-                        npk: "00785",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Ditolak",
-                        status2: "Ditolak",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0008",
-                        tanggal: "2021-01-08",
-                        nama: "Umam Ardi Pratama",
-                        npk: "00786",
-                        type: "Izin",
-                        typeOther: "Dinas Luar",
-                        status1: "Disetujui",
-                        status2: "Ditolak",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0009",
-                        tanggal: "2021-01-09",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0010",
-                        tanggal: "2021-01-10",
-                        nama: "Arya Saputra",
-                        npk: "00790",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Disetujui",
-                    },
-                ],
+                data: [],
             }
         },
         mounted() {
+            moment.locale("id")
             this.isMounted = true
         },
         unmounted() {
@@ -151,10 +55,51 @@
             log(data) {
                 console.log(data)
             },
+            handleChangeMonth() {
+                this.$inertia.visit(route("admin.cuzia"), {
+                    method: "get",
+                    data: { date: this.selectedDate },
+                    preserveState: true,
+                    preserveScroll: true,
+                })
+            },
+            selectData(kode) {
+                this.selectedData = this.dataSorted.filter((item) => item.kode === kode)[0]
+            },
         },
         computed: {
+            monthYearRangeList() {
+                const list = []
+                if (this.rangeMonth !== null) {
+                    const range = {
+                        start: moment(this.rangeMonth.min).startOf("month"),
+                        end: moment(this.rangeMonth.max).startOf("month"),
+                    }
+                    list.push({
+                        value: range.start.format("YYYY-MM"),
+                        text: range.start.format("MMMM YYYY"),
+                    })
+                    while (range.start < range.end) {
+                        const x = range.start.add(1, "month")
+                        list.push({
+                            value: x.format("YYYY-MM"),
+                            text: x.format("MMMM YYYY"),
+                        })
+                    }
+                }
+                return list
+            },
+            transformData() {
+                return this.data.map((data) => {
+                    data.tanggal = new Date(data.created_at)
+                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
+                    data.nama = data.user.name
+                    data.type = "data diri"
+                    return data
+                })
+            },
             filterData() {
-                return this.data.filter((item) => {
+                return this.transformData.filter((item) => {
                     if (this.showType === "all") {
                         return true
                     } else {
@@ -162,23 +107,8 @@
                     }
                 })
             },
-            transformData() {
-                return this.filterData.map((data) => {
-                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
-                    return data
-                })
-            },
-            searchData() {
-                return this.transformData.filter((data) => {
-                    if (this.isMounted)
-                        return Object.keys(data).some((key) => {
-                            return String(data[key]).toLowerCase().includes(this.search.toLowerCase())
-                        })
-                    else return data
-                })
-            },
             dataSorted() {
-                const data = this.searchData.slice()
+                const data = this.filterData.slice()
                 return data
                     .sort((a, b) => {
                         if (this.sortDesc) {
@@ -240,6 +170,29 @@
             slice() {
                 if (this.page > this.totalPage) this.page = this.totalPage
             },
+            isMounted() {
+                this.data = this.pengajuanDatadiri
+                this.rangeMonth = this.range_tanggal
+                this.selectedDate = moment(this.date, "YYYY-MM-DD").format("YYYY-MM")
+            },
+            pengajuanDatadiri: {
+                deep: true,
+                handler(val, oldVal) {
+                    this.data = this.pengajuanDatadiri
+                },
+            },
+            range_tanggal: {
+                deep: true,
+                handler(val, oldVal) {
+                    this.rangeMonth = this.range_tanggal
+                },
+            },
+            date: {
+                deep: true,
+                handler(val, oldVal) {
+                    this.selectedDate = moment(this.date, "YYYY-MM-DD").format("YYYY-MM")
+                },
+            },
         },
     }
 </script>
@@ -248,7 +201,9 @@
     <HeadInertia title="Cuzia" />
 
     <MainLayout :nav="nav">
-        <div class="py-4 text-center text-3xl font-black uppercase text-base-content">Cuzia</div>
+        <div class="py-4 text-center text-3xl font-black uppercase text-base-content" @click="log(monthYearRangeList)">
+            Cuzia
+        </div>
         <div class="mb-4 grid grid-cols-6 gap-x-6 gap-y-4">
             <div class="col-span-6 flex flex-wrap items-center sm:col-span-2 lg:col-auto">
                 <div class="btn btn-primary mr-3">
@@ -270,22 +225,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-6 flex flex-wrap items-center sm:col-span-3 lg:col-auto">
-                <label class="mr-3 block">Bulan : </label>
-                <select class="w-full flex-1 rounded-lg bg-base-100">
-                    <option>Juli</option>
-                    <option>Agustus</option>
-                </select>
-            </div>
             <div class="col-span-6 !col-end-7 flex items-center lg:col-span-2">
-                <input
-                    type="text"
-                    name="search"
-                    id="search"
-                    placeholder="Cari"
-                    v-model="search"
-                    class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
-                />
+                <label class="mr-3 block">Bulan : </label>
+                <select v-model="selectedDate" class="input-text flex-1" @change="handleChangeMonth()">
+                    <option v-for="(month, index) in monthYearRangeList" :key="index" :value="month.value">
+                        {{ month.text }}
+                    </option>
+                </select>
             </div>
         </div>
 
@@ -369,48 +315,48 @@
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status1')">
-                            <div class="flex items-center justify-center">
-                                approval 1
+                        <th class="cursor-pointer select-none" @click="sorted('approval1_status')">
+                            <div class="flex items-center">
+                                status approval 1
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status1'"
+                                    v-if="!sortDesc && sortBy === 'approval1_status'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status1'"
+                                    v-if="sortDesc && sortBy === 'approval1_status'"
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status2')">
-                            <div class="flex items-center justify-center">
-                                approval 2
+                        <th class="cursor-pointer select-none" @click="sorted('approval2_status')">
+                            <div class="flex items-center">
+                                status approval 2
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status2'"
+                                    v-if="!sortDesc && sortBy === 'approval2_status'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status2'"
+                                    v-if="sortDesc && sortBy === 'approval2_status'"
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status3')">
-                            <div class="flex items-center justify-center">
-                                approve HR
+                        <th class="cursor-pointer select-none" @click="sorted('hr_confirm')">
+                            <div class="flex items-center">
+                                status HR
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status3'"
+                                    v-if="!sortDesc && sortBy === 'hr_confirm'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status3'"
+                                    v-if="sortDesc && sortBy === 'hr_confirm'"
                                 ></box-icon>
                             </div>
                         </th>
@@ -426,79 +372,48 @@
                         <td>{{ item.nama }}</td>
                         <td>{{ item.type }}</td>
                         <td
-                            class="border-b-0 text-center font-bold"
+                            class="font-bold"
                             :class="{
-                                'bg-success': item.status1 === 'Disetujui',
-                                'bg-error': item.status1 === 'Ditolak',
-                                'bg-warning': item.status1 === 'Menunggu',
+                                'text-warning': item.approval1_status === 'pending',
+                                'text-error': item.approval1_status === 'rejected',
+                                'text-success': item.approval1_status === 'approved',
                             }"
                         >
-                            <box-icon
-                                v-if="item.status1 === 'Ditolak'"
-                                name="x-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status1 === 'Disetujui'"
-                                name="check-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status1 === 'Menunggu'"
-                                name="time"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
+                            {{ item.approval1_status }}
                         </td>
                         <td
-                            class="border-b-0 text-center font-bold"
+                            class="font-bold"
                             :class="{
-                                'bg-success': item.status2 === 'Disetujui',
-                                'bg-error': item.status2 === 'Ditolak',
-                                'bg-warning': item.status2 === 'Menunggu',
+                                'text-warning': item.approval2_status === 'pending',
+                                'text-error': item.approval2_status === 'rejected',
+                                'text-success': item.approval2_status === 'approved',
                             }"
                         >
-                            <box-icon
-                                v-if="item.status2 === 'Ditolak'"
-                                name="x-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status2 === 'Disetujui'"
-                                name="check-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status2 === 'Menunggu'"
-                                name="time"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
+                            {{ item.approval2_status }}
                         </td>
                         <td
-                            class="border-b-0 text-center font-bold"
+                            class="font-bold"
                             :class="{
-                                'bg-success': item.status3 === 'Disetujui',
-                                'bg-error': item.status3 === 'Ditolak',
-                                'bg-warning': item.status3 === 'Menunggu',
+                                'text-warning': item.hr_confirm === 'pending',
+                                'text-error': item.hr_confirm === 'rejected',
+                                'text-success': item.hr_confirm === 'approved',
                             }"
                         >
-                            <box-icon
-                                v-if="item.status3 === 'Ditolak'"
-                                name="x-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status3 === 'Disetujui'"
-                                name="check-circle"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
-                            <box-icon
-                                v-else-if="item.status3 === 'Menunggu'"
-                                name="time"
-                                class="fill-current dark:fill-base-300"
-                            ></box-icon>
+                            {{ item.hr_confirm }}
                         </td>
                         <td>
-                            <div class="btn btn-primary btn-sm">detail</div>
+                            <label
+                                :for="
+                                    item.type == 'Cuti'
+                                        ? 'detail-cuti'
+                                        : item.type == 'Izin'
+                                        ? 'detail-izin'
+                                        : 'detail-datadiri'
+                                "
+                                @click="selectData(item.kode)"
+                                class="btn btn-primary btn-sm"
+                                >detail</label
+                            >
                         </td>
                     </tr>
                 </tbody>
@@ -528,4 +443,5 @@
             </div>
         </div>
     </MainLayout>
+    <ModalCuzia :datadiri="selectedData" :kontrak="kontrak" :jabatan="jabatan" :isAdmin="true" />
 </template>

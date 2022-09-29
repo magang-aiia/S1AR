@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         ]);
 
         // random user dev
-        User::factory(300)->create();
-        UserDetail::factory(300)->create();
+        // User::factory(300)->create();
+        // UserDetail::factory(300)->create();
     }
 }

@@ -3245,6 +3245,9 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 .left-1\/2 {
     left: 50%;
 }
+.-bottom-6 {
+    bottom: -1.5rem;
+}
 .z-0 {
     z-index: 0;
 }
@@ -3408,6 +3411,9 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 .h-36 {
     height: 9rem;
 }
+.h-24 {
+    height: 6rem;
+}
 .h-12 {
     height: 3rem;
 }
@@ -3443,9 +3449,6 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 }
 .h-60 {
     height: 15rem;
-}
-.h-24 {
-    height: 6rem;
 }
 .min-h-screen {
     min-height: 100vh;
@@ -3506,6 +3509,9 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 }
 .w-\[calc\(50\%_-_0\.5rem\)\] {
     width: calc(50% - 0.5rem);
+}
+.w-96 {
+    width: 24rem;
 }
 .w-max {
     width: -webkit-max-content;
@@ -3811,9 +3817,6 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 .border-b {
     border-bottom-width: 1px;
 }
-.border-b-0 {
-    border-bottom-width: 0px;
-}
 .border-dashed {
     border-style: dashed;
 }
@@ -3831,6 +3834,10 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 }
 .border-transparent {
     border-color: transparent;
+}
+.border-\[\#6b7280\] {
+    --tw-border-opacity: 1;
+    border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
 .border-base-100 {
     --tw-border-opacity: 1;
@@ -4009,6 +4016,10 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
 .py-3 {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -4016,10 +4027,6 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 .px-1 {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
-}
-.px-3 {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
 }
 .py-6 {
     padding-top: 1.5rem;
@@ -4175,9 +4182,17 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
     --tw-text-opacity: 1;
     color: rgb(220 38 38 / var(--tw-text-opacity));
 }
+.text-warning {
+    --tw-text-opacity: 1;
+    color: hsl(var(--wa) / var(--tw-text-opacity));
+}
 .text-error {
     --tw-text-opacity: 1;
     color: hsl(var(--er) / var(--tw-text-opacity));
+}
+.text-success {
+    --tw-text-opacity: 1;
+    color: hsl(var(--su) / var(--tw-text-opacity));
 }
 .text-base-100 {
     --tw-text-opacity: 1;
@@ -4197,14 +4212,6 @@ body[dir="rtl"] .checkbox[aria-checked="true"] {
 .text-green-600 {
     --tw-text-opacity: 1;
     color: rgb(22 163 74 / var(--tw-text-opacity));
-}
-.text-success {
-    --tw-text-opacity: 1;
-    color: hsl(var(--su) / var(--tw-text-opacity));
-}
-.text-warning {
-    --tw-text-opacity: 1;
-    color: hsl(var(--wa) / var(--tw-text-opacity));
 }
 .text-emerald-900 {
     --tw-text-opacity: 1;

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\MadingController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\CuziaController;
 use App\Http\Controllers\KaryawanController;
 
@@ -46,17 +47,13 @@ Route::middleware(['auth', 'verified', 'can:isUser'])->group(function () {
         ]);
     })->name('izin');
 
-    Route::get('/history', function () {
-        return Inertia::render('User/History', [
-            'isAtasan' => Gate::allows('isAtasan'),
-        ]);
-    })->name('history');
+    Route::get('/history', [ApprovalController::class, 'history'])->name('history');
 
     Route::get('/absensi', [AbsensiController::class, 'user_index'])->name('absensi');
 
-    Route::get('/approval', function () {
-        return Inertia::render('User/Approval');
-    })->middleware('can:isAtasan')->name('approval');
+    Route::get('/approval', [ApprovalController::class, 'approval'])->middleware('can:isAtasan')->name('approval');
+    Route::post('/approval', [ApprovalController::class, 'approve'])->middleware('can:isAtasan')->name('approve');
+    Route::post('/reject', [ApprovalController::class, 'rejected'])->middleware('can:isAtasan')->name('rejected');
 });
 
 Route::get('/notification', function () {
@@ -83,9 +80,7 @@ Route::middleware(['auth', 'verified', 'can:isAdmin'])->prefix('admin')->group(f
         return Inertia::render('Admin/Izin');
     })->name('admin.izin');
 
-    Route::get('/cuzia', function () {
-        return Inertia::render('Admin/Cuzia');
-    })->name('admin.cuzia');
+    Route::get('/cuzia', [CuziaController::class, 'index_admin'])->name('admin.cuzia');
 
     Route::get('/pengajuan', function () {
         return Inertia::render('Admin/Pengajuan');

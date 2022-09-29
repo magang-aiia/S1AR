@@ -11,6 +11,17 @@
             HeadInertia,
             ModalCuzia,
         },
+        props: {
+            pengajuanDatadiri: Object,
+            kontrak: {
+                type: Object,
+                default: () => ({}),
+            },
+            jabatan: {
+                type: Object,
+                default: () => ({}),
+            },
+        },
         data() {
             return {
                 nav: getNav("approval", undefined, true),
@@ -22,118 +33,8 @@
                 slice: 5,
                 page: 1,
                 isMounted: false,
-                data: [
-                    {
-                        kode: "CUTI-2021-0001",
-                        tanggal: "2021-01-01",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0002",
-                        tanggal: "2021-01-02",
-                        nama: "Andi Sulaeman",
-                        npk: "00788",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0003",
-                        tanggal: "2021-01-03",
-                        nama: "Cahyo Widya Kusuma",
-                        npk: "00785",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0004",
-                        tanggal: "2021-01-04",
-                        nama: "Erlaangga Setiabudi",
-                        npk: "00783",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0005",
-                        tanggal: "2021-01-05",
-                        nama: "Santoso Ali",
-                        npk: "00787",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0006",
-                        tanggal: "2021-01-06",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0007",
-                        tanggal: "2021-01-07",
-                        nama: "Angga Wijaya",
-                        npk: "00785",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Ditolak",
-                        status2: "Ditolak",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0008",
-                        tanggal: "2021-01-08",
-                        nama: "Umam Ardi Pratama",
-                        npk: "00786",
-                        type: "Izin",
-                        typeOther: "Dinas Luar",
-                        status1: "Disetujui",
-                        status2: "Ditolak",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0009",
-                        tanggal: "2021-01-09",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0010",
-                        tanggal: "2021-01-10",
-                        nama: "Arya Saputra",
-                        npk: "00790",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Disetujui",
-                    },
-                ],
+                selectedData: {},
+                data: [],
             }
         },
         mounted() {
@@ -153,10 +54,29 @@
             log(data) {
                 console.log(data)
             },
+            selectData(kode) {
+                this.selectedData = this.dataSorted.filter((item) => item.kode === kode)[0]
+            },
         },
         computed: {
+            transformData() {
+                const id = this.$page.props.auth.user.id
+                return this.data.map((data) => {
+                    data.tanggal = new Date(data.created_at)
+                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
+                    data.nama = data.user.name
+                    data.type = "data diri"
+                    data.status =
+                        data.approval1_id === id
+                            ? data.approval1_status
+                            : data.approval2_id === id
+                            ? data.approval2_status
+                            : null
+                    return data
+                })
+            },
             filterData() {
-                return this.data.filter((item) => {
+                return this.transformData.filter((item) => {
                     if (this.showType === "all") {
                         return true
                     } else {
@@ -164,23 +84,8 @@
                     }
                 })
             },
-            transformData() {
-                return this.filterData.map((data) => {
-                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
-                    return data
-                })
-            },
-            searchData() {
-                return this.transformData.filter((data) => {
-                    if (this.isMounted)
-                        return Object.keys(data).some((key) => {
-                            return String(data[key]).toLowerCase().includes(this.search.toLowerCase())
-                        })
-                    else return data
-                })
-            },
             dataSorted() {
-                const data = this.searchData.slice()
+                const data = this.filterData.slice()
                 return data
                     .sort((a, b) => {
                         if (this.sortDesc) {
@@ -242,6 +147,15 @@
             slice() {
                 if (this.page > this.totalPage) this.page = this.totalPage
             },
+            isMounted() {
+                this.data = this.pengajuanDatadiri
+            },
+            pengajuanDatadiri: {
+                deep: true,
+                handler(val, oldVal) {
+                    this.data = this.pengajuanDatadiri
+                },
+            },
         },
     }
 </script>
@@ -269,16 +183,6 @@
                         {{ item }}
                     </div>
                 </div>
-            </div>
-            <div class="col-span-6 !col-end-7 flex items-end lg:col-span-2">
-                <input
-                    type="text"
-                    name="search"
-                    id="search"
-                    placeholder="Cari"
-                    v-model="search"
-                    class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
-                />
             </div>
         </div>
 
@@ -334,7 +238,7 @@
                         </th>
                         <th class="cursor-pointer select-none" @click="sorted('nama')">
                             <div class="flex items-center">
-                                nama pengajuan
+                                nama pengaju
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
@@ -362,18 +266,18 @@
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status1')">
+                        <th class="cursor-pointer select-none" @click="sorted('status')">
                             <div class="flex items-center">
                                 status
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status1'"
+                                    v-if="!sortDesc && sortBy === 'status'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status1'"
+                                    v-if="sortDesc && sortBy === 'status'"
                                 ></box-icon>
                             </div>
                         </th>
@@ -391,12 +295,12 @@
                         <td
                             class="font-bold"
                             :class="{
-                                'text-success': item.status1 === 'Disetujui',
-                                'text-error': item.status1 === 'Ditolak',
-                                'text-warning': item.status1 === 'Menunggu',
+                                'text-success': item.status === 'approved',
+                                'text-error': item.status === 'rejected',
+                                'text-warning': item.status === 'pending',
                             }"
                         >
-                            {{ item.status1 }}
+                            {{ item.status }}
                         </td>
                         <td>
                             <label
@@ -407,6 +311,7 @@
                                         ? 'detail-izin'
                                         : 'detail-datadiri'
                                 "
+                                @click="selectData(item.kode)"
                                 class="btn btn-primary btn-sm"
                                 >detail</label
                             >
@@ -423,9 +328,9 @@
                 <button
                     class="btn"
                     :class="{ 'btn-active': i === page }"
-                    v-for="i in paginateIndex"
+                    v-for="(i, index) in paginateIndex"
                     :key="i"
-                    @click="i === '...' ? (i > page ? page-- : page++) : (page = i)"
+                    @click="i === '...' ? (index === 1 ? page-- : page++) : (page = i)"
                 >
                     {{ i }}
                 </button>
@@ -439,5 +344,5 @@
             </div>
         </div>
     </MainLayout>
-    <ModalCuzia :isApprovable="true" />
+    <ModalCuzia :isApprovable="true" :datadiri="selectedData" :kontrak="kontrak" :jabatan="jabatan" />
 </template>

@@ -32,6 +32,15 @@ mix.js("resources/js/app.js", "public/js")
     .alias({
         "@": "resources/js",
     })
+    .webpackConfig({
+        output: {
+            chunkFilename: "js/[name].js?id=[chunkhash]",
+        },
+    })
+    .extract(["@inertiajs", "vue", "lodash"], "js/vendor~utils-1.js")
+    .extract(["axios", "moment"], "js/vendor~utils-2.js")
+    .extract(["@fullcalendar", "v-drag"], "js/vendor~utils-3.js")
+    .extract()
 
 if (mix.inProduction()) {
     mix.version()

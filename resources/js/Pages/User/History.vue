@@ -13,6 +13,15 @@
         },
         props: {
             isAtasan: Boolean,
+            pengajuanDatadiri: Object,
+            kontrak: {
+                type: Object,
+                default: () => ({}),
+            },
+            jabatan: {
+                type: Object,
+                default: () => ({}),
+            },
         },
         data() {
             return {
@@ -25,118 +34,8 @@
                 slice: 5,
                 page: 1,
                 isMounted: false,
-                data: [
-                    {
-                        kode: "CUTI-2021-0001",
-                        tanggal: "2021-01-01",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0002",
-                        tanggal: "2021-01-02",
-                        nama: "Andi Sulaeman",
-                        npk: "00788",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0003",
-                        tanggal: "2021-01-03",
-                        nama: "Cahyo Widya Kusuma",
-                        npk: "00785",
-                        type: "Cuti",
-                        typeOther: "Cuti tahunan",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0004",
-                        tanggal: "2021-01-04",
-                        nama: "Erlaangga Setiabudi",
-                        npk: "00783",
-                        type: "Cuti",
-                        typeOther: "Cuti Istimewa",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0005",
-                        tanggal: "2021-01-05",
-                        nama: "Santoso Ali",
-                        npk: "00787",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Menunggu",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0006",
-                        tanggal: "2021-01-06",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Menunggu",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0007",
-                        tanggal: "2021-01-07",
-                        nama: "Angga Wijaya",
-                        npk: "00785",
-                        type: "Data diri",
-                        typeOther: "Data diri",
-                        status1: "Ditolak",
-                        status2: "Ditolak",
-                        status3: "Ditolak",
-                    },
-                    {
-                        kode: "CUTI-2021-0008",
-                        tanggal: "2021-01-08",
-                        nama: "Umam Ardi Pratama",
-                        npk: "00786",
-                        type: "Izin",
-                        typeOther: "Dinas Luar",
-                        status1: "Disetujui",
-                        status2: "Ditolak",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0009",
-                        tanggal: "2021-01-09",
-                        nama: "Budi Suherman",
-                        npk: "00789",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Disetujui",
-                        status2: "Disetujui",
-                        status3: "Menunggu",
-                    },
-                    {
-                        kode: "CUTI-2021-0010",
-                        tanggal: "2021-01-10",
-                        nama: "Arya Saputra",
-                        npk: "00790",
-                        type: "Izin",
-                        typeOther: "Sakit",
-                        status1: "Ditolak",
-                        status2: "Disetujui",
-                        status3: "Disetujui",
-                    },
-                ],
+                selectedData: {},
+                data: [],
             }
         },
         mounted() {
@@ -157,10 +56,22 @@
             log(data) {
                 console.log(data)
             },
+            selectData(kode) {
+                this.selectedData = this.dataSorted.filter((item) => item.kode === kode)[0]
+            },
         },
         computed: {
+            transformData() {
+                return this.data.map((data) => {
+                    data.tanggal = new Date(data.created_at)
+                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
+                    data.nama = data.name
+                    data.type = "data diri"
+                    return data
+                })
+            },
             filterData() {
-                return this.data.filter((item) => {
+                return this.transformData.filter((item) => {
                     if (this.showType === "all") {
                         return true
                     } else {
@@ -168,23 +79,8 @@
                     }
                 })
             },
-            transformData() {
-                return this.filterData.map((data) => {
-                    data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
-                    return data
-                })
-            },
-            searchData() {
-                return this.transformData.filter((data) => {
-                    if (this.isMounted)
-                        return Object.keys(data).some((key) => {
-                            return String(data[key]).toLowerCase().includes(this.search.toLowerCase())
-                        })
-                    else return data
-                })
-            },
             dataSorted() {
-                const data = this.searchData.slice()
+                const data = this.filterData.slice()
                 return data
                     .sort((a, b) => {
                         if (this.sortDesc) {
@@ -246,6 +142,9 @@
             slice() {
                 if (this.page > this.totalPage) this.page = this.totalPage
             },
+            isMounted() {
+                this.data = this.pengajuanDatadiri
+            },
         },
     }
 </script>
@@ -273,16 +172,6 @@
                         {{ item }}
                     </div>
                 </div>
-            </div>
-            <div class="col-span-6 !col-end-7 flex items-end lg:col-span-2">
-                <input
-                    type="text"
-                    name="search"
-                    id="search"
-                    placeholder="Cari"
-                    v-model="search"
-                    class="block w-full rounded-lg bg-base-100 disabled:cursor-not-allowed disabled:bg-base-300 dark:disabled:bg-black/70"
-                />
             </div>
         </div>
 
@@ -336,48 +225,48 @@
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status1')">
+                        <th class="cursor-pointer select-none" @click="sorted('approval1_status')">
                             <div class="flex items-center">
                                 status approval 1
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status1'"
+                                    v-if="!sortDesc && sortBy === 'approval1_status'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status1'"
+                                    v-if="sortDesc && sortBy === 'approval1_status'"
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status2')">
+                        <th class="cursor-pointer select-none" @click="sorted('approval2_status')">
                             <div class="flex items-center">
                                 status approval 2
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status2'"
+                                    v-if="!sortDesc && sortBy === 'approval2_status'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status2'"
+                                    v-if="sortDesc && sortBy === 'approval2_status'"
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('status3')">
+                        <th class="cursor-pointer select-none" @click="sorted('hr_confirm')">
                             <div class="flex items-center">
                                 status HR
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'status3'"
+                                    v-if="!sortDesc && sortBy === 'hr_confirm'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'status3'"
+                                    v-if="sortDesc && sortBy === 'hr_confirm'"
                                 ></box-icon>
                             </div>
                         </th>
@@ -393,32 +282,32 @@
                         <td
                             class="font-bold"
                             :class="{
-                                'text-success': item.status1 === 'Disetujui',
-                                'text-error': item.status1 === 'Ditolak',
-                                'text-warning': item.status1 === 'Menunggu',
+                                'text-warning': item.approval1_status === 'pending',
+                                'text-error': item.approval1_status === 'rejected',
+                                'text-success': item.approval1_status === 'approved',
                             }"
                         >
-                            {{ item.status1 }}
+                            {{ item.approval1_status }}
                         </td>
                         <td
                             class="font-bold"
                             :class="{
-                                'text-success': item.status2 === 'Disetujui',
-                                'text-error': item.status2 === 'Ditolak',
-                                'text-warning': item.status2 === 'Menunggu',
+                                'text-warning': item.approval2_status === 'pending',
+                                'text-error': item.approval2_status === 'rejected',
+                                'text-success': item.approval2_status === 'approved',
                             }"
                         >
-                            {{ item.status2 }}
+                            {{ item.approval2_status }}
                         </td>
                         <td
                             class="font-bold"
                             :class="{
-                                'text-success': item.status3 === 'Disetujui',
-                                'text-error': item.status3 === 'Ditolak',
-                                'text-warning': item.status3 === 'Menunggu',
+                                'text-warning': item.hr_confirm === 'pending',
+                                'text-error': item.hr_confirm === 'rejected',
+                                'text-success': item.hr_confirm === 'approved',
                             }"
                         >
-                            {{ item.status3 }}
+                            {{ item.hr_confirm }}
                         </td>
                         <td>
                             <label
@@ -429,6 +318,7 @@
                                         ? 'detail-izin'
                                         : 'detail-datadiri'
                                 "
+                                @click="selectData(item.kode)"
                                 class="btn btn-primary btn-sm"
                                 >detail</label
                             >
@@ -445,9 +335,9 @@
                 <button
                     class="btn"
                     :class="{ 'btn-active': i === page }"
-                    v-for="i in paginateIndex"
+                    v-for="(i, index) in paginateIndex"
                     :key="i"
-                    @click="i === '...' ? (i > page ? page-- : page++) : (page = i)"
+                    @click="i === '...' ? (index === 1 ? page-- : page++) : (page = i)"
                 >
                     {{ i }}
                 </button>
@@ -461,5 +351,5 @@
             </div>
         </div>
     </MainLayout>
-    <ModalCuzia />
+    <ModalCuzia :datadiri="selectedData" :kontrak="kontrak" :jabatan="jabatan" />
 </template>
