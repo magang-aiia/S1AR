@@ -17,7 +17,10 @@ class ApprovalController extends Controller
 {
     public function history()
     {
-        $pengajuan_datadiri = PengajuanDatadiri::where('user_id', Auth::user()->id)->with('user', 'kontrak', 'approval1', 'approval2', 'rejected')->get();
+        $pengajuan_datadiri = PengajuanDatadiri::where('user_id', Auth::user()->id)
+            ->with('user', 'kontrak', 'approval1', 'approval2', 'rejected', 'file')
+            ->get();
+            
         return Inertia::render('User/History', [
             'isAtasan' => Gate::allows('isAtasan'),
             'pengajuanDatadiri' => $pengajuan_datadiri,
@@ -28,7 +31,11 @@ class ApprovalController extends Controller
 
     public function approval()
     {
-        $pengajuanDatadiri = PengajuanDatadiri::where('approval1_id', Auth::user()->id)->orWhere('approval2_id', Auth::user()->id)->with('user', 'kontrak', 'approval1', 'approval2', 'rejected')->get();
+        $pengajuanDatadiri = PengajuanDatadiri::where('approval1_id', Auth::user()->id)
+            ->orWhere('approval2_id', Auth::user()->id)
+            ->with('user', 'kontrak', 'approval1', 'approval2', 'rejected', 'file')
+            ->get();
+            
         return Inertia::render('User/Approval', [
             'pengajuanDatadiri' => $pengajuanDatadiri,
             'kontrak' => Kontrak::all(),
@@ -54,7 +61,7 @@ class ApprovalController extends Controller
             }
         }
 
-        return Redirect::route('approval');
+        return CuziaController::cekOrUpdateDatadiri($pengajuanDatadiri->kode);
     }
 
     public function rejected(Request $request)
@@ -81,6 +88,7 @@ class ApprovalController extends Controller
             ]);
         }
 
+        if (Gate::allows('isAdmin')) return Redirect::route('admin.cuzia');
         return Redirect::route('approval');
     }
 }

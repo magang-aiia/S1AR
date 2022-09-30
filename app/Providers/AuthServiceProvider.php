@@ -33,6 +33,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->bagian->jabatan_id > '1' && $user->bagian->jabatan_id < '8';
         });
 
+        Gate::define('isAdminOrAtasan', function ($user) {
+            return  $user->bagian->jabatan_id > '1';
+        });
+
         Gate::define('isUser', function ($user) {
             return $user->bagian->kode != 'ADMIN';
         });

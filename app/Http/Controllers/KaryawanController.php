@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use ZipArchive;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Jabatan;
 use App\Models\Kontrak;
+use App\Models\LevelUser;
 use App\Models\Departemen;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Exports\KaryawanExport;
 use App\Imports\KaryawanImport;
 use App\Http\Controllers\Controller;
-use App\Models\Jabatan;
-use App\Models\LevelUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
@@ -276,5 +278,26 @@ class KaryawanController extends Controller
         $user = User::find($id);
         $user->delete();
         return Redirect::route('admin.karyawan')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function change_password(Request $request)
+    {
+        $request->validate([
+            'route' => 'required',
+            'old_password' => 'required',
+            'new_password' => 'required|min:6',
+            'confirm_password' => 'required|same:new_password'
+        ]);
+
+        $route = $request->route;
+
+        $user = User::find(Auth::user()->id);
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            return Redirect::route($route)->with('success', 'Password berhasil diubah');
+        } else {
+            return "Password lama salah";
+        }
     }
 }

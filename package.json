@@ -53,6 +53,7 @@
         "moment": "^2.29.4",
         "v-drag": "^3.0.8",
         "vue-custom-scrollbar": "^1.4.4",
-        "vue3-apexcharts": "^1.4.1"
+        "vue3-apexcharts": "^1.4.1",
+        "vue3-carousel": "^0.1.47"
     }
 }

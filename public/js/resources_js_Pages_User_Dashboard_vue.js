@@ -202,25 +202,32 @@
                         expose()
                         var route = window.route
                         var modalpass = (0, vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false)
+                        var errors = (0, vue__WEBPACK_IMPORTED_MODULE_1__.ref)({})
                         var form = (0, _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
+                            route: route().current(),
                             old_password: "",
                             new_password: "",
                             confirm_password: "",
                         })
 
                         var submit = function submit() {
-                            console.log(form.old_password)
-                            console.log(form.new_password)
-                            console.log(form.confirm_password)
-                            form.reset("old_password")
-                            form.reset("new_password")
-                            form.reset("confirm_password")
-                            modalpass.value = false
+                            form.post(route("change_password"), {
+                                onError: function onError(err) {
+                                    errors.value = err
+                                },
+                                onSuccess: function onSuccess() {
+                                    form.reset("old_password")
+                                    form.reset("new_password")
+                                    form.reset("confirm_password")
+                                    modalpass.value = false
+                                },
+                            })
                         }
 
                         var __returned__ = {
                             route: route,
                             modalpass: modalpass,
+                            errors: errors,
                             form: form,
                             submit: submit,
                             Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link,
@@ -703,10 +710,14 @@
                 )
 
                 var _hoisted_42 = {
+                    key: 0,
+                    class: "mt-2 text-sm text-error",
+                }
+                var _hoisted_43 = {
                     class: "mb-2",
                 }
 
-                var _hoisted_43 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_44 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "label",
                     {
                         for: "new_password",
@@ -717,11 +728,15 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_44 = {
+                var _hoisted_45 = {
+                    key: 0,
+                    class: "mt-2 text-sm text-error",
+                }
+                var _hoisted_46 = {
                     class: "mb-2",
                 }
 
-                var _hoisted_45 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_47 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "label",
                     {
                         for: "confirm_password",
@@ -732,7 +747,12 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_46 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_48 = {
+                    key: 0,
+                    class: "mt-2 text-sm text-error",
+                }
+
+                var _hoisted_49 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "button",
                     {
                         type: "submit",
@@ -1574,14 +1594,34 @@
                                                                                           ],
                                                                                       ]
                                                                                   ),
+                                                                                  $setup.errors.old_password
+                                                                                      ? ((0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(),
+                                                                                        (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(
+                                                                                            "div",
+                                                                                            _hoisted_42,
+                                                                                            (0,
+                                                                                            vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(
+                                                                                                $setup.errors
+                                                                                                    .old_password
+                                                                                            ),
+                                                                                            1
+                                                                                            /* TEXT */
+                                                                                        ))
+                                                                                      : (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(
+                                                                                            "v-if",
+                                                                                            true
+                                                                                        ),
                                                                               ]
                                                                           ),
                                                                           (0,
                                                                           vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                                                                               "div",
-                                                                              _hoisted_42,
+                                                                              _hoisted_43,
                                                                               [
-                                                                                  _hoisted_43,
+                                                                                  _hoisted_44,
                                                                                   (0,
                                                                                   vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(
                                                                                       (0,
@@ -1612,14 +1652,34 @@
                                                                                           ],
                                                                                       ]
                                                                                   ),
+                                                                                  $setup.errors.new_password
+                                                                                      ? ((0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(),
+                                                                                        (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(
+                                                                                            "div",
+                                                                                            _hoisted_45,
+                                                                                            (0,
+                                                                                            vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(
+                                                                                                $setup.errors
+                                                                                                    .new_password
+                                                                                            ),
+                                                                                            1
+                                                                                            /* TEXT */
+                                                                                        ))
+                                                                                      : (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(
+                                                                                            "v-if",
+                                                                                            true
+                                                                                        ),
                                                                               ]
                                                                           ),
                                                                           (0,
                                                                           vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                                                                               "div",
-                                                                              _hoisted_44,
+                                                                              _hoisted_46,
                                                                               [
-                                                                                  _hoisted_45,
+                                                                                  _hoisted_47,
                                                                                   (0,
                                                                                   vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(
                                                                                       (0,
@@ -1651,9 +1711,29 @@
                                                                                           ],
                                                                                       ]
                                                                                   ),
+                                                                                  $setup.errors.confirm_password
+                                                                                      ? ((0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(),
+                                                                                        (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(
+                                                                                            "div",
+                                                                                            _hoisted_48,
+                                                                                            (0,
+                                                                                            vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(
+                                                                                                $setup.errors
+                                                                                                    .confirm_password
+                                                                                            ),
+                                                                                            1
+                                                                                            /* TEXT */
+                                                                                        ))
+                                                                                      : (0,
+                                                                                        vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(
+                                                                                            "v-if",
+                                                                                            true
+                                                                                        ),
                                                                               ]
                                                                           ),
-                                                                          _hoisted_46,
+                                                                          _hoisted_49,
                                                                       ],
                                                                       40,
                                                                       /* PROPS, HYDRATE_EVENTS */
@@ -2017,21 +2097,17 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_11 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" lala ")
-
-                var _hoisted_12 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" lala ")
-
-                var _hoisted_13 = {
+                var _hoisted_11 = {
                     for: "saldo-cuti-tahunan",
                     class: "modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out",
                 }
-                var _hoisted_14 = {
+                var _hoisted_12 = {
                     key: 0,
                     for: "",
                     class: "modal-box relative w-11/12 max-w-4xl",
                 }
 
-                var _hoisted_15 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_13 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "label",
                     {
                         for: "saldo-cuti-tahunan",
@@ -2042,7 +2118,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_16 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_14 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "mb-2 text-2xl font-bold",
@@ -2052,7 +2128,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_17 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_15 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "mb-2",
@@ -2062,7 +2138,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_18 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_16 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "overflow-x-auto",
@@ -2209,18 +2285,18 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_19 = [_hoisted_15, _hoisted_16, _hoisted_17, _hoisted_18]
-                var _hoisted_20 = {
+                var _hoisted_17 = [_hoisted_13, _hoisted_14, _hoisted_15, _hoisted_16]
+                var _hoisted_18 = {
                     for: "saldo-cuti-istimewa",
                     class: "modal cursor-pointer bg-black/50 backdrop-blur transition-all ease-in-out",
                 }
-                var _hoisted_21 = {
+                var _hoisted_19 = {
                     key: 0,
                     for: "",
                     class: "modal-box relative w-11/12 max-w-4xl",
                 }
 
-                var _hoisted_22 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_20 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "label",
                     {
                         for: "saldo-cuti-istimewa",
@@ -2231,7 +2307,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_23 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_21 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "mb-2 text-2xl font-bold",
@@ -2241,7 +2317,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_24 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_22 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "mb-2",
@@ -2251,7 +2327,7 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_25 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
+                var _hoisted_23 = /*#__PURE__*/ (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)(
                     "div",
                     {
                         class: "overflow-x-auto",
@@ -2334,13 +2410,11 @@
                     /* HOISTED */
                 )
 
-                var _hoisted_26 = [_hoisted_22, _hoisted_23, _hoisted_24, _hoisted_25]
+                var _hoisted_24 = [_hoisted_20, _hoisted_21, _hoisted_22, _hoisted_23]
                 function render(_ctx, _cache, $props, $setup, $data, $options) {
                     var _component_HeadInertia = (0, vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("HeadInertia")
 
                     var _component_LinkInertia = (0, vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("LinkInertia")
-
-                    var _component_file_viewer = (0, vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("file-viewer")
 
                     var _component_MainLayout = (0, vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("MainLayout")
 
@@ -2435,16 +2509,6 @@
                                                         ),
                                                     ]
                                                 ),
-                                                _hoisted_11,
-                                                (0, vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
-                                                    _component_file_viewer,
-                                                    {
-                                                        id: "file-viewer2",
-                                                        filename: "Sample-Sales-Data.xlsx",
-                                                        url: "https://go.microsoft.com/fwlink/?LinkID=521962",
-                                                    }
-                                                ),
-                                                _hoisted_12,
                                             ]
                                         }),
                                         _: 1,
@@ -2473,7 +2537,7 @@
                                     ),
                                     [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.modalCutiTahunan]]
                                 ),
-                                (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_13, [
+                                (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_11, [
                                     (0, vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
                                         vue__WEBPACK_IMPORTED_MODULE_0__.Transition,
                                         {
@@ -2486,8 +2550,8 @@
                                                         ? ((0, vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(),
                                                           (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(
                                                               "label",
-                                                              _hoisted_14,
-                                                              _hoisted_19
+                                                              _hoisted_12,
+                                                              _hoisted_17
                                                           ))
                                                         : (0, vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(
                                                               "v-if",
@@ -2519,7 +2583,7 @@
                                     ),
                                     [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.modalCutiIstimewa]]
                                 ),
-                                (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_20, [
+                                (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_18, [
                                     (0, vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
                                         vue__WEBPACK_IMPORTED_MODULE_0__.Transition,
                                         {
@@ -2532,8 +2596,8 @@
                                                         ? ((0, vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(),
                                                           (0, vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(
                                                               "label",
-                                                              _hoisted_21,
-                                                              _hoisted_26
+                                                              _hoisted_19,
+                                                              _hoisted_24
                                                           ))
                                                         : (0, vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(
                                                               "v-if",

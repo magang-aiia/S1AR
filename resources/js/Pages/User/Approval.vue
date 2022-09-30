@@ -64,7 +64,7 @@
                 return this.data.map((data) => {
                     data.tanggal = new Date(data.created_at)
                     data.tanggalSemantic = moment(data.tanggal).format("DD MMMM YYYY")
-                    data.nama = data.user.name
+                    data.nama_pengaju = data.user.name
                     data.type = "data diri"
                     data.status =
                         data.approval1_id === id
@@ -236,18 +236,18 @@
                                 ></box-icon>
                             </div>
                         </th>
-                        <th class="cursor-pointer select-none" @click="sorted('nama')">
+                        <th class="cursor-pointer select-none" @click="sorted('nama_pengaju')">
                             <div class="flex items-center">
                                 nama pengaju
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-up"
-                                    v-if="!sortDesc && sortBy === 'nama'"
+                                    v-if="!sortDesc && sortBy === 'nama_pengaju'"
                                 ></box-icon>
                                 <box-icon
                                     class="ml-2 fill-current"
                                     name="caret-down"
-                                    v-if="sortDesc && sortBy === 'nama'"
+                                    v-if="sortDesc && sortBy === 'nama_pengaju'"
                                 ></box-icon>
                             </div>
                         </th>
@@ -290,7 +290,7 @@
                         <td>{{ item.tanggalSemantic }}</td>
                         <td>{{ item.kode }}</td>
                         <td>{{ item.npk }}</td>
-                        <td>{{ item.nama }}</td>
+                        <td>{{ item.nama_pengaju }}</td>
                         <td>{{ item.type }}</td>
                         <td
                             class="font-bold"

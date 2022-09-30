@@ -51,10 +51,13 @@ Route::middleware(['auth', 'verified', 'can:isUser'])->group(function () {
 
     Route::get('/absensi', [AbsensiController::class, 'user_index'])->name('absensi');
 
-    Route::get('/approval', [ApprovalController::class, 'approval'])->middleware('can:isAtasan')->name('approval');
-    Route::post('/approval', [ApprovalController::class, 'approve'])->middleware('can:isAtasan')->name('approve');
-    Route::post('/reject', [ApprovalController::class, 'rejected'])->middleware('can:isAtasan')->name('rejected');
+    Route::get('/approval', [ApprovalController::class, 'approval'])->middleware('can:isAdminOrAtasan')->name('approval');
 });
+
+Route::post('/approval', [ApprovalController::class, 'approve'])->middleware(['auth', 'verified','can:isAdminOrAtasan'])->name('approve');
+Route::post('/reject', [ApprovalController::class, 'rejected'])->middleware(['auth', 'verified','can:isAdminOrAtasan'])->name('rejected');
+
+Route::post('/change_password', [KaryawanController::class, 'change_password'])->middleware(['auth', 'verified'])->name('change_password');
 
 Route::get('/notification', function () {
     return Inertia::render('Notification', [

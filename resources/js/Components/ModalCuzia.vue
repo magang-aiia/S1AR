@@ -107,6 +107,13 @@
                         : ""
                     : ""
             },
+            isImage(filename) {
+                const ext = filename.split(".").pop().toLowerCase()
+                return ["jpg", "jpeg", "png", "svg"].includes(ext)
+            },
+            isPdf(filename) {
+                return filename.split(".").pop().toLowerCase() === "pdf"
+            },
         },
         watch: {
             datadiri: {
@@ -304,14 +311,14 @@
                         />
                     </div>
                     <div class="max-w-[calc(100%_-_11rem)] -md:max-w-sm -md:text-center">
-                        <div class="max-w-full truncate text-2xl font-bold md:text-4xl">{{ editKaryawan.nama }}</div>
+                        <div class="max-w-full truncate text-2xl font-bold md:text-4xl">{{ editKaryawan.name }}</div>
                         <div class="text-md max-w-full truncate opacity-60 md:text-lg">{{ editKaryawan.email }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-6 gap-x-6 gap-y-4">
                     <div class="col-span-6 lg:col-span-2">
-                        <label for="nama" class="mb-2 block">Nama Lengkap</label>
-                        <input type="text" readonly v-model="editKaryawan.nama" id="nama" class="input-text" />
+                        <label for="name" class="mb-2 block">Nama Lengkap</label>
+                        <input type="text" readonly v-model="editKaryawan.name" id="name" class="input-text" />
                     </div>
                     <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                         <label for="email" class="mb-2 block">Email</label>
@@ -609,8 +616,51 @@
                                 {{ editKaryawan.hr_confirm }}
                             </span>
                             <br />
-                            <span class="font-bold">Alasan : </span>{{ alasanPenolakan("000000") }} <br />
+                            <span class="font-bold">Alasan : </span>{{ alasanPenolakan(1) }} <br />
                         </div>
+                    </div>
+                    <div class="col-span-6">
+                        <label for="nama" class="mb-2 block">File Data Dukung</label>
+                        <div class="flex flex-col items-center justify-center" v-if="editKaryawan.file.length == 0">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="48"
+                                height="48"
+                                viewBox="0 0 24 24"
+                                class="fill-current"
+                                style="transform: ; msfilter: "
+                            >
+                                <path
+                                    d="M19.937 8.68c-.011-.032-.02-.063-.033-.094a.997.997 0 0 0-.196-.293l-6-6a.997.997 0 0 0-.293-.196c-.03-.014-.062-.022-.094-.033a.991.991 0 0 0-.259-.051C13.04 2.011 13.021 2 13 2H6c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V9c0-.021-.011-.04-.013-.062a.99.99 0 0 0-.05-.258zM16.586 8H14V5.414L16.586 8zM6 20V4h6v5a1 1 0 0 0 1 1h5l.002 10H6z"
+                                ></path>
+                            </svg>
+                            <div>Tidak ada file</div>
+                        </div>
+                        <div class="flex w-max" v-drag:x v-else>
+                            <template v-for="file in editKaryawan.file" :key="file.id">
+                                <div
+                                    v-if="isImage(file.nama_file)"
+                                    class="relative mr-3 flex h-80 w-96 items-center overflow-hidden rounded-lg shadow dark:border-gray-800 -md:h-48 -md:w-48"
+                                >
+                                    <img
+                                        class="absolute min-h-full min-w-full opacity-30 blur"
+                                        :src="'/assets/pengajuan/datadiri/file/' + file.nama_file"
+                                    />
+                                    <img
+                                        class="z-[1] mx-auto max-h-full max-w-full"
+                                        :src="'/assets/pengajuan/datadiri/file/' + file.nama_file"
+                                    />
+                                </div>
+                            </template>
+                        </div>
+                        <template v-for="file in editKaryawan.file" :key="file.id">
+                            <div v-if="isPdf(file.nama_file)" class="relative mt-3 w-full">
+                                <object
+                                    :data="'/assets/pengajuan/datadiri/file/' + file.nama_file"
+                                    class="h-[80vh] w-full"
+                                ></object>
+                            </div>
+                        </template>
                     </div>
                     <div class="col-span-6" v-if="isApprovable">
                         <label for="nama" class="mb-2 block">Alasan Penolakan</label>
@@ -641,7 +691,7 @@
                             >Kembali</label
                         >
                         <label
-                            v-if="isApprovable && editKaryawan.status == 'pending' && !isAdmin"
+                            v-if="isApprovable && editKaryawan.status == 'pending'"
                             @click="approveDatadiri(editKaryawan.id)"
                             class="max-w-48 btn btn-primary w-[calc(50%_-_.75rem)]"
                             >Setujui</label

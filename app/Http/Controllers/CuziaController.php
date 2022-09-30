@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class CuziaController extends Controller
 {
@@ -36,7 +37,11 @@ class CuziaController extends Controller
             $this->month = date('m', strtotime($request->date));
             $this->year = date('Y', strtotime($request->date));
         }
-        $pengajuanDatadiri =  PengajuanDatadiri::whereMonth('created_at', '=', $this->month)->whereYear('created_at', '=', $this->year)->with('user', 'kontrak', 'approval1', 'approval2', 'rejected')->get();
+        $pengajuanDatadiri =  PengajuanDatadiri::whereMonth('created_at', '=', $this->month)
+            ->whereYear('created_at', '=', $this->year)
+            ->with('user', 'kontrak', 'approval1', 'approval2', 'rejected', 'file')
+            ->get();
+
         return Inertia::render('Admin/Cuzia', [
             'pengajuanDatadiri' => $pengajuanDatadiri,
             'date' => $this->date,
@@ -112,7 +117,7 @@ class CuziaController extends Controller
 
         if ($request->hasFile('files')) {
             $files = $request->file('files');
-            $allowedFile = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'gif', 'txt', 'zip', 'rar', '7z'];
+            $allowedFile = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'svg'];
             foreach ($files as $file) {
                 $ext = $file->getClientOriginalExtension();
                 if (!in_array($ext, $allowedFile)) continue;
@@ -162,5 +167,45 @@ class CuziaController extends Controller
         }
 
         return redirect()->route('history')->with('success', 'Data berhasil diajukan');
+    }
+
+    public static function cekOrUpdateDatadiri($kode)
+    {
+        $pengajuan = PengajuanDatadiri::where('kode', $kode)->first();
+        $user_detail = UserDetail::where('user_id', $pengajuan->user_id)->first();
+        if ($pengajuan->approval1_status === 'approved' && $pengajuan->approval2_status === 'approved' && $pengajuan->hr_confirm === 'approved') {
+            if ($pengajuan->avatar !== $user_detail->user->avatar) {
+
+                if ($user_detail->user->avatar !== 'avatar.jpg') {
+                    Storage::delete('public/image/' . $user_detail->user->avatar);
+                } 
+
+                Storage::copy('public/pengajuan/datadiri/avatar/' . $pengajuan->avatar, 'public/image/' . $pengajuan->avatar);
+            }
+
+            $user_detail->user->update([
+                'name' => $pengajuan->name,
+                'email' => $pengajuan->email,
+                'avatar' => $pengajuan->avatar,
+            ]);
+
+            $user_detail->update([
+                'no_hp' => $pengajuan->no_hp,
+                'tmp_lahir' => $pengajuan->tmp_lahir,
+                'tgl_lahir' => $pengajuan->tgl_lahir,
+                'no_npwp' => $pengajuan->no_npwp,
+                'no_ktp' => $pengajuan->no_ktp,
+                'alamat_dom' => $pengajuan->alamat_dom,
+                'alamat_ktp' => $pengajuan->alamat_ktp,
+                'nama_istri' => $pengajuan->nama_istri,
+                'jml_anak' => $pengajuan->jml_anak,
+                'nama_anak1' => $pengajuan->nama_anak1,
+                'nama_anak2' => $pengajuan->nama_anak2,
+                'nama_anak3' => $pengajuan->nama_anak3,
+            ]);
+        }
+
+        if (Gate::allows('isAdmin')) return Redirect::route('admin.cuzia');
+        return Redirect::route('approval');
     }
 }

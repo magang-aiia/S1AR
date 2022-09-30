@@ -16,21 +16,27 @@
     const route = window.route
 
     const modalpass = ref(false)
+    const errors = ref({})
 
     const form = useForm({
+        route: route().current(),
         old_password: "",
         new_password: "",
         confirm_password: "",
     })
 
     const submit = () => {
-        console.log(form.old_password)
-        console.log(form.new_password)
-        console.log(form.confirm_password)
-        form.reset("old_password")
-        form.reset("new_password")
-        form.reset("confirm_password")
-        modalpass.value = false
+        form.post(route("change_password"), {
+            onError: (err) => {
+                errors.value = err
+            },
+            onSuccess: () => {
+                form.reset("old_password")
+                form.reset("new_password")
+                form.reset("confirm_password")
+                modalpass.value = false
+            },
+        })
     }
 </script>
 
@@ -218,10 +224,12 @@
                     <div class="mb-2">
                         <label for="old_password" class="mb-2 block">Password Lama</label>
                         <input type="password" v-model="form.old_password" id="old_password" class="input-text" />
+                        <div class="mt-2 text-sm text-error" v-if="errors.old_password">{{ errors.old_password }}</div>
                     </div>
                     <div class="mb-2">
                         <label for="new_password" class="mb-2 block">Password Baru</label>
                         <input type="password" v-model="form.new_password" id="new_password" class="input-text" />
+                        <div class="mt-2 text-sm text-error" v-if="errors.new_password">{{ errors.new_password }}</div>
                     </div>
                     <div class="mb-2">
                         <label for="confirm_password" class="mb-2 block">Konfirmasi Password</label>
@@ -231,6 +239,9 @@
                             id="confirm_password"
                             class="input-text"
                         />
+                        <div class="mt-2 text-sm text-error" v-if="errors.confirm_password">
+                            {{ errors.confirm_password }}
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary mt-2 w-full">Ubah Password</button>
                 </form>
